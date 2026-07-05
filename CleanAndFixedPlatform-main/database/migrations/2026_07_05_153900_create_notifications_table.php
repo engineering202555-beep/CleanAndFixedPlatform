@@ -1,0 +1,46 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('notifications', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->unsignedBigInteger('reference_id')->nullable();
+            $table->enum('reference_type', ['service_requests',
+                'complaints',
+                'subscriptions',
+                'account_status'
+                ]);
+            $table->enum('type', ['new_offer',
+            'offer_accepted',
+            'offer_urgent',
+            'offer_rejected',
+            'subscription_expired',
+            'complaint_resolved',
+            'provider_approved',
+            'account_blocked',
+            ]);
+            $table->string('title');
+            $table->text('body');
+            $table->boolean('is_read')->default(false);
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('notifications');
+    }
+};
