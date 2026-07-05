@@ -24,6 +24,9 @@ return new class extends Migration
             $table->decimal('latitude_x', 10, 7);
             $table->decimal('longitude_y', 10, 7);
             $table->boolean('is_urgent')->default(false);
+            $table->unsignedSmallInteger('duration_in_minutes')->default(30);  //مدة الطلب نصف ساعة
+            $table->timestamp('expires_at');   // هذه المدة هي = لحظة انشاء الطلب + 30
+            $table->unsignedTinyInteger('search_level')->default(1);// عداد للبحث اول مرة خلال نفس المنطقة عن مقدم خدمة, الثانية لكل المناطق
             $table->timestamps();
         });
     }

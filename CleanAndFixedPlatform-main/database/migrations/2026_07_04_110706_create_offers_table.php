@@ -18,7 +18,8 @@ return new class extends Migration
             $table->decimal('price', 8, 2);
             $table->enum('status', ['pending', 'rejected','accepted'])->default('pending');
             $table->text('notes')->nullable();
-            $table->unsignedSmallInteger('duration_in_minutes')->default(5);
+            $table->unsignedSmallInteger('duration_in_minutes')->default(30);  //مدة العرض هي نصف ساعة بحالة pending
+            $table->timestamp('expires_at');   // هذه المدة هي = لحظة انشاء العرض + 30
             $table->timestamps();
         });
     }

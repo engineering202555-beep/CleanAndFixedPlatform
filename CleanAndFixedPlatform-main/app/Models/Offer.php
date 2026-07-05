@@ -16,6 +16,7 @@ class Offer extends Model
         'status',
         'notes',
         'duration_in_minutes',
+        'expires_at'
     ];
 
     protected function casts(): array

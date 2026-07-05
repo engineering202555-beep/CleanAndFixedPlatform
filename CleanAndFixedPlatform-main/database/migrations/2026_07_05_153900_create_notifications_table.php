@@ -27,7 +27,6 @@ return new class extends Migration
             'subscription_expired',
             'complaint_resolved',
             'provider_approved',
-            'account_blocked',
             ]);
             $table->string('title');
             $table->text('body');

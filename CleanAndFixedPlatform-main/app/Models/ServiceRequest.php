@@ -18,9 +18,12 @@ class ServiceRequest extends Model
         'status',
         'starts_at',
         'ends_at',
-        'latitude',
-        'longitude',
+        'latitude_x',
+        'longitude_y',
         'is_urgent',
+        'search_level',
+        'expires_at',
+        'duration_in_minutes'
     ];
 
     protected function casts(): array
