@@ -13,6 +13,7 @@ class Offer extends Model
         'service_provider_id',
         'service_request_id',
         'price',
+        'estimated_duration',
         'status',
         'notes',
         'duration_in_minutes',

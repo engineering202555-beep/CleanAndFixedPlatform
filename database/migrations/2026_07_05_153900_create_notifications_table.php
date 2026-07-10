@@ -23,7 +23,6 @@ return new class extends Migration
             $table->enum('type', ['new_offer',
             'offer_accepted',
             'offer_urgent',
-            'offer_rejected',
             'subscription_expired',
             'complaint_resolved',
             'provider_approved',

@@ -14,16 +14,17 @@ class ServiceRequest extends Model
         'service_provider_id',
         'service_category_id',
         'service_area_id',
+        'request_type',
         'description',
         'status',
         'starts_at',
-        'ends_at',
         'latitude_x',
         'longitude_y',
         'is_urgent',
-        'search_level',
         'expires_at',
-        'duration_in_minutes'
+        'duration_in_minutes',
+        'counter_urgent_requests_during_day',
+        'counter_cancel_by_system',
     ];
 
     protected function casts(): array

@@ -13,14 +13,18 @@ class ServiceProvider extends Model
         'user_id',
         'service_category_id',
         'service_area_id',
+        'inspection_price',
         'bio',
         'experience_years',
         'is_approved',
         'rating',
+        'latitude',
+        'longitude',
         'working_from',
         'working_to',
         'availability_status',
         'account_status',
+        'blocked_until'
     ];
 
     protected function casts(): array
@@ -70,5 +74,10 @@ class ServiceProvider extends Model
     public function images()
     {
         return $this->morphMany(Image::class, 'imageable');
+    }
+
+    public function blockedServiceProvider()
+    {
+        return $this->hasMany(BlockedServiceProvider::class);
     }
 }

@@ -35,4 +35,9 @@ class Customer extends Model
     {
         return $this->hasMany(Review::class);
     }
+
+    public function blockedServiceProvider()
+    {
+        return $this->hasMany(BlockedServiceProvider::class);
+    }
 }
