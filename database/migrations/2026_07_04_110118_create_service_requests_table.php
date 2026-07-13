@@ -37,12 +37,12 @@ return new class extends Migration
                 ->default('pending_local');
 
             $table->text('description')->nullable();
-            $table->timestamp('starts_at');
+            $table->dateTime('starts_at');
             $table->decimal('latitude_x', 10, 7);
             $table->decimal('longitude_y', 10, 7);
             $table->boolean('is_urgent')->default(false);
-            $table->unsignedSmallInteger('duration_in_minutes')->default(30);  //مدة الطلب نصف ساعة
-            $table->timestamp('expires_at');   // هذه المدة هي = لحظة انشاء الطلب + 30
+            $table->unsignedSmallInteger('duration_in_minutes')->default(60);  //مدة الطلب نصف ساعة
+            $table->dateTime('expires_at');   // هذه المدة هي = لحظة انشاء الطلب + ساعة
             $table->unsignedTinyInteger('counter_urgent_requests_during_day')->default(0); // 2 فقط
             $table->unsignedTinyInteger('counter_cancel_by_system')->default(0); // 3 فقط
             $table->timestamps();

@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('service_provider_id')->constrained()->cascadeOnDelete();
             $table->foreignId('subscription_id')->constrained()->restrictOnDelete();
-            $table->timestamp('starts_at');
-            $table->timestamp('ends_at');
+            $table->dateTime('starts_at');
+            $table->dateTime('ends_at');
             $table->enum('status', ['active', 'cancelled'])->default('active');
             $table->unsignedSmallInteger('used_requests')->default(0);
             $table->timestamps();
