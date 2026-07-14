@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('user_name')->unique();
             $table->string('password');
+            $table->boolean('must_change_password')->default(true);
             $table->timestamps();
         });
     }

@@ -17,6 +17,7 @@ class Offer extends Model
         'status',
         'notes',
         'duration_in_minutes',
+        'starts_at',
         'expires_at'
     ];
 
