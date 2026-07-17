@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Customer;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -23,28 +23,24 @@ class RegisterRequest extends FormRequest
 {
     return [
 
-        'firstName' => [
+        'first_name' => [
             'required',
             'string',
             'max:50',
         ],
 
-        'lastName' => [
+        'last_name' => [
             'required',
             'string',
             'max:50',
         ],
 
-        'email' => [
-            'required',
-            'email',
-            'unique:users,email',
-        ],
+        
 
-        'phone' => [
+        'phone_number' => [
             'required',
             'string',
-            'unique:users,phone',
+            'unique:users,phone_number',
         ],
 
         'password' => [
@@ -52,6 +48,11 @@ class RegisterRequest extends FormRequest
             'confirmed',
             'min:8',
         ],
+
+
+
+
+
 
     ];
 }
@@ -62,19 +63,15 @@ public function messages(): array
 {
     return [
 
-        'firstName.required' => 'الاسم الأول مطلوب.',
+        'first_name.required' => 'الاسم الأول مطلوب.',
 
-        'lastName.required' => 'اسم العائلة مطلوب.',
+        'last_name.required' => 'اسم العائلة مطلوب.',
 
-        'email.required' => 'البريد الإلكتروني مطلوب.',
 
-        'email.email' => 'صيغة البريد الإلكتروني غير صحيحة.',
 
-        'email.unique' => 'البريد الإلكتروني مستخدم مسبقًا.',
+        'phone_number.required' => 'رقم الهاتف مطلوب.',
 
-        'phone.required' => 'رقم الهاتف مطلوب.',
-
-        'phone.unique' => 'رقم الهاتف مستخدم مسبقًا.',
+        'phone_number.unique' => 'رقم الهاتف مستخدم مسبقًا.',
 
         'password.required' => 'كلمة المرور مطلوبة.',
 
@@ -89,13 +86,13 @@ public function attributes(): array
 {
     return [
 
-        'firstName' => 'الاسم الأول',
+        'first_name' => 'الاسم الأول',
 
-        'lastName' => 'اسم العائلة',
+        'last_name' => 'اسم العائلة',
 
-        'email' => 'البريد الإلكتروني',
+        
 
-        'phone' => 'رقم الهاتف',
+        'phone_number' => 'رقم الهاتف',
 
         'password' => 'كلمة المرور',
 

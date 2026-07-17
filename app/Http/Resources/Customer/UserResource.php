@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Customer;
 
-use Illuminate\Http\Request;
+use Illuminate\Http\Request\Customer;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource
@@ -18,13 +18,12 @@ class UserResource extends JsonResource
 
             'id' => $this->id,
 
-            'firstName' => $this->firstName,
+            'first_name' => $this->firstName,
 
-            'lastName' => $this->lastName,
+            'last_name' => $this->lastName,
 
-            'email' => $this->email,
 
-            'phone' => $this->phone,
+            'phone_number' => $this->phone_number,
 
             'role' => $this->getRoleNames()->first(),
 

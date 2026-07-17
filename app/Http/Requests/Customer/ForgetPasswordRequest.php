@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Customer;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class LoginRequest extends FormRequest
+class ForgetPasswordRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,13 +22,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email'=>['required','email'],
-            'password'=>['required','string']
-
-
-
-
-
-        ];
+        'phone_number' => ['required', 'string'],
+    ];
     }
 }

@@ -35,4 +35,22 @@ return [
         ],
     ],
 
+
+    'ultramsg' => [
+    'base_url' => env('ULTRAMSG_BASE_URL'),
+    'instance_id' => env('ULTRAMSG_INSTANCE_ID'),
+    'token' => env('ULTRAMSG_TOKEN'),
+],
+
+'otp' => [
+
+    'driver' => env('OTP_DRIVER', 'fake'),
+
+],
+
+
+
+
+
+
 ];
