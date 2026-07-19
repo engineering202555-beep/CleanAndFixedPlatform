@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('service_category_id')->constrained()->cascadeOnDelete();
             $table->foreignId('service_area_id')->constrained()->cascadeOnDelete();
-
             $table->decimal('inspection_price', 8, 2);
             $table->text('bio')->nullable();
             $table->unsignedTinyInteger('experience_years')->default(0);

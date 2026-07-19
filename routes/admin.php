@@ -2,6 +2,7 @@
 
 
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\ServiceProviderController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -23,6 +24,8 @@ use Illuminate\Support\Facades\Route;
     ])->group(function () {
 
         Route::post('/logout', [AuthController::class, 'logout']);
+        Route::get('/service-providers', [ServiceProviderController::class, ' getApprovedProviders']);
+
     });
 
 

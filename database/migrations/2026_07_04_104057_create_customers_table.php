@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-      $table->foreignId('service_area_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('service_area_id')->nullable()->constrained()->nullOnDelete();
             $table->enum('status', ['active', 'blocked'])->default('active');
             $table->timestamp('blocked_until')->nullable();
             $table->timestamps();
