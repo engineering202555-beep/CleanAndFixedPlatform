@@ -15,7 +15,7 @@ class SubscriptionProviderSeeder extends Seeder
      */
     public function run(): void
     {
-        $providers = ServiceProvider::all();
+        $providers = ServiceProvider::where('is_approved', true)->get();
 
         foreach ($providers as $index => $provider) {
 
@@ -41,6 +41,7 @@ class SubscriptionProviderSeeder extends Seeder
             }
 
             SubscriptionProvider::create([
+
                 'service_provider_id' => $provider->id,
                 'subscription_id' => $subscriptionId,
 

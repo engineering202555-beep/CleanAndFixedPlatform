@@ -13,7 +13,7 @@ class SubscriptionSeeder extends Seeder
      */
     public function run(): void
     {
-       Subscription::insert(
+       Subscription::insert([
 
                [
                    'type' => 'free',
@@ -39,6 +39,6 @@ class SubscriptionSeeder extends Seeder
                    'description' => 'الباقة الذهبية الممتازة للورش والشركات، تتيح استقبال حتى 120 طلباً شهرياً مع أولوية في الدعم الفني.',
                    'is_active' => true
                ],
-       );
+       ]);
     }
 }

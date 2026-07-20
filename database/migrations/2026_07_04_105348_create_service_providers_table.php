@@ -25,7 +25,7 @@ return new class extends Migration
             $table->time('working_to');
             $table->decimal('latitude', 10, 7);
             $table->decimal('longitude', 10, 7);
-            $table->enum('account_status', ['pending','active','blocked'])->default('pending');
+            $table->enum('account_status', ['pending','active','blocked','rejected'])->default('pending');
             $table->enum('availability_status', ['busy', 'available', 'offline'])->default('available');
             $table->timestamp('blocked_until')->nullable();
             $table->timestamps();

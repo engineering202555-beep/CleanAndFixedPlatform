@@ -47,7 +47,7 @@ class CustomerSeeder extends Seeder
 
             Customer::create([
                 'user_id' => $user->id,
-                'service_area_id' => rand(0, 11),
+                'service_area_id' => rand(1, 12),
                 'status' => 'active',
             ]);
         }
