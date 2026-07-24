@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Customer\WhatsApp;
+namespace App\Services\CustomerAuth\WhatsApp;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;

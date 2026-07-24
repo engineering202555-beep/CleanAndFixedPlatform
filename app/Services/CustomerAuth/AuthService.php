@@ -1,5 +1,5 @@
 <?php
-namespace App\Services\Customer;
+namespace App\Services\CustomerAuth;
 
 use App\Models\User;
 use Illuminate\Validation\ValidationException;
@@ -31,9 +31,10 @@ class AuthService
 
     $customer=Customer::create([
         'user_id' => $user->id,
-       // 'service_area_id' => $data['service_area_id'],
+        'service_area_id' => $data['service_area_id'],
         'status' => 'active',
-        'blocked_until' => null,
+       
+    
     ]);
 
     $this->otpService->generate($user);
@@ -45,6 +46,12 @@ class AuthService
     ];
 });
     }
+
+
+
+
+
+    
 
 public function verifyOtp(array $data): array
 {

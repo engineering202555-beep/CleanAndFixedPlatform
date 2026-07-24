@@ -10,7 +10,7 @@ use App\Http\Requests\Customer\ForgetPasswordRequest;
 use App\Http\Requests\Customer\ResetPasswordRequest;
 
 use App\Http\Requests\Customer\VerifyOtpRequest;
-use App\Services\Customer\AuthService;
+use App\Services\CustomerAuth\AuthService;
 
 use Illuminate\Http\Request;
 

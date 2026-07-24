@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Services\Customer;
+namespace App\Services\CustomerAuth;
 use App\Models\PhoneOtp;
 use Illuminate\Validation\ValidationException;
-use App\Services\Customer\WhatsApp\UltraMsgService;
+use App\Services\CustomerAuth\WhatsApp\UltraMsgService;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Contracts\Customer\OTPServiceInterface;

@@ -49,7 +49,7 @@ class RegisterRequest extends FormRequest
             'min:8',
         ],
 
-
+'service_area_id'=>['required','exists:service_areas,id']
 
 
 
@@ -78,7 +78,7 @@ public function messages(): array
         'password.confirmed' => 'تأكيد كلمة المرور غير مطابق.',
 
         'password.min' => 'يجب أن تكون كلمة المرور 8 أحرف على الأقل.',
-
+         'service_area_id.required'=>'المنطقة السكنية مطلوبة'
     ];
 }
 
@@ -90,7 +90,7 @@ public function attributes(): array
 
         'last_name' => 'اسم العائلة',
 
-        
+         'service_area_id'=>'معرف المنطقة',
 
         'phone_number' => 'رقم الهاتف',
 

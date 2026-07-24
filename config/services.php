@@ -44,7 +44,7 @@ return [
 
 'otp' => [
 
-    'driver' => env('OTP_DRIVER', 'fake'),
+    'driver' => env('OTP_DRIVER', 'whatsapp'),
 
 ],
 

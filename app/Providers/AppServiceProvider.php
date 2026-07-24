@@ -7,7 +7,7 @@ use App\Models\ServiceProvider;
 use App\Models\ServiceRequest;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use App\Contracts\Customer\OTPServiceInterface;
-use App\Services\Customer\OTPService;
+use App\Services\CustomerAuth\OTPService;
 
 class AppServiceProvider extends BaseServiceProvider
 {

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('service_requests', function (Blueprint $table) {
             $table->id();
             $table->foreignId('customer_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('service_provider_id')->constrained()->cascadeOnDelete();
+      
             $table->foreignId('service_category_id')->constrained()->cascadeOnDelete();
             $table->foreignId('service_area_id')->constrained()->cascadeOnDelete();
 
@@ -43,8 +43,7 @@ return new class extends Migration
             $table->boolean('is_urgent')->default(false);
             $table->unsignedSmallInteger('duration_in_minutes')->default(60);  //مدة الطلب نصف ساعة
             $table->dateTime('expires_at');   // هذه المدة هي = لحظة انشاء الطلب + ساعة
-            $table->unsignedTinyInteger('counter_urgent_requests_during_day')->default(0); // 2 فقط
-            $table->unsignedTinyInteger('counter_cancel_by_system')->default(0); // 3 فقط
+           // 3 فقط
             $table->timestamps();
         });
     }

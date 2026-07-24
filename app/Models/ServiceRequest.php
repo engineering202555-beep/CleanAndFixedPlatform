@@ -11,7 +11,7 @@ class ServiceRequest extends Model
 
     protected $fillable = [
         'customer_id',
-        'service_provider_id',
+      
         'service_category_id',
         'service_area_id',
         'request_type',
@@ -23,8 +23,7 @@ class ServiceRequest extends Model
         'is_urgent',
         'expires_at',
         'duration_in_minutes',
-        'counter_urgent_requests_during_day',
-        'counter_cancel_by_system',
+     
     ];
 
     protected function casts(): array

@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Customer\AuthController;
 Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
 
+    Route::post('/store-service-requests', [ServiceRequestController::class, 'store']);
+
+
 });
 Route::prefix('auth')->group(function () {
 
