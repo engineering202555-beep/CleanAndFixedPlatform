@@ -15,7 +15,7 @@ class SubscriptionProviderSeeder extends Seeder
      */
     public function run(): void
     {
-        $providers = ServiceProvider::where('is_approved', true)->get();
+        $providers = ServiceProvider::where('account_status', 'active')->get();
 
         foreach ($providers as $index => $provider) {
 
