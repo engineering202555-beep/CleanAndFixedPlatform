@@ -19,15 +19,16 @@ return new class extends Migration
             $table->decimal('inspection_price', 8, 2);
             $table->text('bio')->nullable();
             $table->unsignedTinyInteger('experience_years')->default(0);
-            $table->boolean('is_approved')->default(false);
             $table->decimal('rating',3,2)->default(0);  //مثل 4.7
             $table->time('working_from');
             $table->time('working_to');
             $table->decimal('latitude', 10, 7);
             $table->decimal('longitude', 10, 7);
+            $table->string('rejection_reason')->nullable();
             $table->enum('account_status', ['pending','active','blocked','rejected'])->default('pending');
             $table->enum('availability_status', ['busy', 'available', 'offline'])->default('available');
             $table->timestamp('blocked_until')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

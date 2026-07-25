@@ -17,9 +17,9 @@ return new class extends Migration
             $table->foreignId('service_area_id')->constrained()->cascadeOnDelete();
             $table->enum('status', ['active', 'blocked'])->default('active');
             $table->unsignedTinyInteger('counter_urgent_requests_during_day')->default(0); // 2 فقط
-          
             $table->unsignedTinyInteger('counter_cancel_by_system')->default(0);
             $table->timestamp('blocked_until')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

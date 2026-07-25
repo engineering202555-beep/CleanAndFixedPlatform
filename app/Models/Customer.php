@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Customer extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'user_id',
@@ -16,7 +18,7 @@ class Customer extends Model
         'blocked_until',
            'counter_urgent_requests_during_day',
         'counter_cancel_by_system',
-      
+
     ];
 
     public function user()

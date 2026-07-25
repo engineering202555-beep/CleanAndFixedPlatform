@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->timestamp('phone_verified_at')->nullable();
             $table->rememberToken();
+            $table->softDeletes();
             $table->timestamps();
         });
 

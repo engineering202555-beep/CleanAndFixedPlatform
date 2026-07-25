@@ -4,19 +4,22 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ServiceProvider extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'user_id',
         'service_category_id',
         'service_area_id',
         'inspection_price',
+        'rejection_reason',
         'bio',
         'experience_years',
-        'is_approved',
         'rating',
         'latitude',
         'longitude',
@@ -27,13 +30,21 @@ class ServiceProvider extends Model
         'blocked_until'
     ];
 
-    protected function casts(): array
+    protected $casts = [
+        'inspection_price' => 'decimal:2',
+        'rating'           => 'decimal:2',
+        'latitude'         => 'decimal:7',
+        'longitude'        => 'decimal:7',
+        'working_from'     => 'datetime:H:i',
+        'working_to'       => 'datetime:H:i',
+        'blocked_until'    => 'datetime',
+    ];
+
+    public function profileImage(): MorphOne
     {
-        return [
-            'is_approved' => 'boolean',
-            'working_from' => 'datetime:H:i',
-            'working_to' => 'datetime:H:i',
-        ];
+        return $this->morphOne(Image::class, 'imageable')
+            ->where('type', 'profile')
+            ->latestOfMany();
     }
 
     public function user()

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -12,7 +13,7 @@ class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable,HasRoles,HasApiTokens;
-
+    use SoftDeletes;
     /**
      * The attributes that are mass assignable.
      *
