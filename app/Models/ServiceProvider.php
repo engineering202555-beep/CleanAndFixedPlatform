@@ -18,6 +18,7 @@ class ServiceProvider extends Model
         'service_area_id',
         'inspection_price',
         'rejection_reason',
+        'block_reason',
         'bio',
         'experience_years',
         'rating',
