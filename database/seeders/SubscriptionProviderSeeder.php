@@ -52,6 +52,8 @@ class SubscriptionProviderSeeder extends Seeder
                 'status' => 'active',
 
                 'used_requests' => $usedRequests,
+
+                'is_complimentary'=> false
             ]);
         }
     }

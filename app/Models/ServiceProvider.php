@@ -92,4 +92,9 @@ class ServiceProvider extends Model
     {
         return $this->hasMany(BlockedServiceProvider::class);
     }
+
+    public function complaintsAgainst()
+    {
+        return $this->hasMany(Complaint::class, 'against_user_id', 'user_id');
+    }
 }

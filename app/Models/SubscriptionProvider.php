@@ -18,6 +18,7 @@ class SubscriptionProvider extends Model
         'ends_at',
         'status',
         'used_requests',
+        'is_complimentary',
     ];
 
     protected function casts(): array

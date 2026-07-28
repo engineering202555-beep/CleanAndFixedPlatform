@@ -60,9 +60,9 @@ class User extends Authenticatable
         return $this->hasOne(ServiceProvider::class);
     }
 
-    public function complaints()
+    public function getProfileAttribute()
     {
-        return $this->hasMany(Complaint::class);
+        return $this->role === 'provider' ? $this->providerProfile : $this->customerProfile;
     }
 
     public function receivedComplaints()

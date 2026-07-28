@@ -32,4 +32,6 @@ class Complaint extends Model
     public function serviceRequest()
     {
         return $this->belongsTo(ServiceRequest::class);
-    }}
+    }
+
+}
