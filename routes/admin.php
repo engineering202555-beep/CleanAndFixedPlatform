@@ -3,6 +3,10 @@
 
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\ServiceProviderController;
+use App\Http\Controllers\Admin\ServiceProviderRequestsController;
+use App\Http\Controllers\Admin\ServiceProvidersManageController;
+use App\Http\Controllers\Admin\ServiceProviderSubscriptionsController;
+use App\Http\Resources\Admin\ServiceProviderBlockedResource;
 use Illuminate\Support\Facades\Route;
 
 
@@ -19,10 +23,25 @@ use Illuminate\Support\Facades\Route;
     ])->group(function () {
 
         Route::post('/logout', [AuthController::class, 'logout']);
+
         Route::get('/service-providers', [ServiceProviderController::class, 'getApprovedProviders']);
         Route::get('/service-provider/{serviceProvider}', [ServiceProviderController::class, 'getInfoProvider']);
-        Route::get('/service-providers-pending', [ServiceProviderController::class, 'getPendingProviders']
-        );
+        Route::get('/service-providers-pending', [ServiceProviderController::class, 'getPendingProviders']);
+        Route::get('/service-providers-rejected', [ServiceProviderController::class, 'getRejectedProviders']);
+        Route::get('/service-providers-filter', [ServiceProviderController::class, 'getApprovedProvidersFilter']);
+        Route::get('/service-providers-subscriptions-breakdown', [ServiceProviderSubscriptionsController::class , 'getProvidersSubscriptionsDetails']);
+        Route::get('/most-active', [ServiceProviderController::class, 'mostActive']);
+        Route::get('/most-complained', [ServiceProviderController::class, 'mostComplained']);
+
+        Route::patch('/approval/{serviceProvider}', [ServiceProviderRequestsController::class, 'approval']);
+        Route::patch('/reconsideration/{serviceProvider}', [ServiceProviderRequestsController::class, 'reconsider']);
+
+        Route::delete('/delete-service-provider/{serviceProvider}', [ServiceProvidersManageController::class, 'deleteServiceProvider']);
+        Route::patch('/block/{serviceProvider}', [ServiceProvidersManageController::class, 'block']);
+        Route::patch('/unblock/{serviceProvider}', [ServiceProvidersManageController::class, 'unblock']);
+        Route::get('/service-providers-blocked', [ServiceProviderController::class, 'getBlockedProviders']);
+        Route::patch('/service-providers-complimentary-month/{serviceProvider}', [ServiceProviderSubscriptionsController::class,'grantComplimentarySubscription']);
     });
+
 
 
