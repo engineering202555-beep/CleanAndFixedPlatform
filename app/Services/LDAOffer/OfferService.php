@@ -5,6 +5,7 @@ namespace App\Services\LDAOffer;
 use App\Models\Customer;
 use App\Models\ServiceRequest;
 use App\Models\User;
+use App\Models\offer;
 use Illuminate\Validation\ValidationException;
 
 class OfferService

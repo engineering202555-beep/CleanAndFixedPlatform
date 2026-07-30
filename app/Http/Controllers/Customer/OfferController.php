@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Customer\OfferResource;
+use App\Http\Resources\Customer\OfferDetailsResource;
 use App\Models\ServiceRequest;
+use App\Models\offer;
 use App\Services\LDAOffer\OfferService;
 
 class OfferController extends Controller
