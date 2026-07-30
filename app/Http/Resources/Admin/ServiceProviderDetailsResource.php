@@ -53,8 +53,6 @@ class ServiceProviderDetailsResource extends JsonResource
 
             'availability_status' => $this->availability_status,
 
-            'is_approved' => $this->is_approved,
-
             'location' => [
                 'latitude' => $this->latitude,
                 'longitude' => $this->longitude,
