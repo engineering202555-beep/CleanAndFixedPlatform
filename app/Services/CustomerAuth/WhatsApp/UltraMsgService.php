@@ -20,7 +20,9 @@ class UltraMsgService
                 'body'  => $message,
             ]
         );
-
+Log::info('Sending to WhatsApp', [
+    'phone' => $phone,
+]);
         if ($response->successful()) {
             Log::info('WhatsApp OTP sent', [
                 'phone' => $phone,

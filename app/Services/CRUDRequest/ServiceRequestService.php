@@ -3,6 +3,8 @@
 namespace App\Services\CRUDRequest;
 
 use App\Models\Customer;
+use App\Models\ServiceProvider;
+use App\Models\ServiceArea;
 use App\Models\ServiceRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -10,7 +12,7 @@ use Illuminate\Validation\ValidationException;
 
 class ServiceRequestService
 {
-    public function store(User $user, array $data): array
+    public function store(User $user, array $data): ServiceRequest
     {
         return DB::transaction(function () use ($user, $data) {
 
@@ -20,11 +22,11 @@ class ServiceRequestService
             ============================================
             */
 
-            $customer = Customer::where('user_id', $user->user_id)->firstOrFail();
+          $customer = Customer::where('user_id', $user->id)->firstOrFail();
 
             /*
             ============================================
-            2- التحقق من الحظر
+            2- التحقق من الحظر  تم
             ============================================
             */
 
@@ -43,22 +45,13 @@ class ServiceRequestService
 
             /*
             ============================================
-            3- معالجة الطلب المستعجل
+            3- معالجة الطلب المستعجل    تم
             ============================================
             */
 
             if ($data['is_urgent']) {
 
-                // إذا أضفتِ last_urgent_request_date
-                // هنا نعيد تصفير العداد عند بداية يوم جديد
-
-                
-                if ($customer->last_urgent_request_date != today()) {
-
-                    $customer->counter_urgent_requests_during_day = 0;
-
-                    $customer->last_urgent_request_date = today();
-                }
+               
                 
 
                 if ($customer->counter_urgent_requests_during_day >= 2) {
@@ -76,7 +69,7 @@ class ServiceRequestService
             /*
             ============================================
             4- التأكد من عدم وجود طلب نشط
-            لنفس الخدمة
+            لنفس الخدمة   تم
             ============================================
             */
 
@@ -117,15 +110,52 @@ class ServiceRequestService
 
             /*
             ============================================
-            5- تحديد موعد البداية
+            5- تحديد موعد البداية   تم
             ============================================
             */
 
             $startsAt = $data['is_urgent']
                 ? now()
                 : $data['starts_at'];
+/*
+============================================
+6- تحديد حالة الطلب   تم
+============================================
+*/
+
+$status = 'pending_local';
+
+$hasLocalProvider = ServiceProvider::where(
+        'service_area_id',
+        $customer->service_area_id
+    )
+    ->where('availability_status', 'available')
+    ->exists();
+
+if (!$hasLocalProvider) {
+
+    $status = 'pending_global';
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             /*
+
+
+
             ============================================
             6- إنشاء الطلب
             ============================================
@@ -141,14 +171,14 @@ class ServiceRequestService
 
                 'request_type' => $data['request_type'],
 
-                'status' => 'pending_local',
+                'status' => $status,
                 'description' => $data['description'] ?? null,
 
                 'starts_at' => $startsAt,
 
-                'latitude_x' => $data['latitude'],
+                'latitude_x' => $data['latitude_x'],
 
-                'longitude_y' => $data['longitude'],
+                'longitude_y' => $data['longitude_y'],
 
                 'is_urgent' => $data['is_urgent'],
 
@@ -158,26 +188,43 @@ class ServiceRequestService
 
             ]);
 
-            /*
-            ============================================
-            7- رفع الصور
-            (سنضيفه لاحقاً)
-            ============================================
-            */
+          if (!empty($data['images'])) {
 
-            /*
-            ============================================
-            8- إرجاع النتيجة
-            ============================================
-            */
+    foreach ($data['images'] as $image) {
 
-            return [
+        $path = $image->store('service_requests', 'public');
 
-                'message' => 'Service request created successfully.',
+        $request->images()->create([
 
-                'request' => $request,
+            'path' => $path,
 
-            ];
+            'type' => 'request_damage',
+
+        ]);
+    }
+}
+
+
+
+
+/*
+============================================
+7- إرسال الطلب لمقدمي الخدمة
+============================================
+
+إذا كانت الحالة pending_local
+→ يرسل الطلب لمقدمي الخدمة بنفس المنطقة.
+
+إذا كانت الحالة pending_global
+→ يرسل الطلب لجميع مقدمي الخدمة في نفس المدينة.
+
+(سننفذها لاحقًا عند بناء نظام العروض والإشعارات)
+*/
+          
+
+            return  $request;
+  
+    
 
         });
     }

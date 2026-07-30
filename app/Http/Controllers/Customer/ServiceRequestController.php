@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreServiceRequestRequest;
-use App\Services\Customer\ServiceRequestService;
+use App\Http\Resources\Customer\ServiceRequestResource;
+use App\Http\Requests\Customer\StoreServiceRequestRequest;
+use App\Services\CRUDRequest\ServiceRequestService;
 
 class ServiceRequestController extends Controller
 {
@@ -12,17 +13,24 @@ class ServiceRequestController extends Controller
         private ServiceRequestService $service
     ) {}
 
-    public function store(StoreServiceRequestRequest $request)
+  public function store(StoreServiceRequestRequest $request)
 {
-    return response()->json(
-
-        $this->ServiceRequestService->store(
-            auth()->user(),
-            $request->validated()
-        ),
-
-        201
-
+    $serviceRequest = $this->service->store(
+        auth()->user(),
+        $request->validated()
     );
+
+    return response()->json([
+        'message' => 'Request created successfully',
+        'data' => new ServiceRequestResource($serviceRequest),
+    ], 201);
 }
+
+
+
+
+
+
+
+
 }

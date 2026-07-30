@@ -23,10 +23,10 @@ class DatabaseSeeder extends Seeder
             CustomerSeeder::class,
             ServiceProviderSeeder::class,
             SubscriptionProviderSeeder::class,
-            ServiceRequestSeeder::class,  // أول شي
+          //  ServiceRequestSeeder::class,  // أول شي
             OfferSeeder::class,            // بعده مباشرة (بيعتمد على وجود الطلبات)
-            ReviewSeeder::class,           // بعد OfferSeeder (بيحتاج العرض المقبول)
-            ComplaintSeeder::class,        // ممكن أي وقت بعد وجود Users وService Requests
+           ReviewSeeder::class,           // بعد OfferSeeder (بيحتاج العرض المقبول)
+            //ComplaintSeeder::class,        // ممكن أي وقت بعد وجود Users وService Requests
         ]);
 
 

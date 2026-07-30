@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Customer;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -33,12 +33,12 @@ class StoreServiceRequestRequest extends FormRequest
             'max:1000'
         ],
 
-        'latitude' => [
+        'latitude_x' => [
             'required',
             'numeric'
         ],
 
-        'longitude' => [
+        'longitude_y' => [
             'required',
             'numeric'
         ],
