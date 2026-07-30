@@ -16,7 +16,8 @@ class Customer extends Model
         'service_area_id',
         'status',
         'blocked_until',
-           'counter_urgent_requests_during_day',
+        'block_reason',
+        'counter_urgent_requests_during_day',
         'counter_cancel_by_system',
 
     ];
