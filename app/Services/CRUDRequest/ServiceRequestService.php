@@ -228,4 +228,83 @@ if (!$hasLocalProvider) {
 
         });
     }
+
+
+public function allRequest(User $user)
+{
+    /*
+    ============================================
+    1- جلب الزبون
+    ============================================
+    */
+
+    $customer = Customer::where(
+        'user_id',
+        $user->id
+    )->firstOrFail();
+
+    /*
+    ============================================
+    2- جلب جميع طلباته
+    ============================================
+    */
+
+    return ServiceRequest::with([
+        'serviceCategory',
+        'images'
+    ])
+        ->where('customer_id', $customer->id)
+        ->latest()
+        ->get();
+}
+
+
+
+public function showRequest(User $user, ServiceRequest $serviceRequest)
+{
+    /*
+    ============================================
+    1- جلب الزبون
+    ============================================
+    */
+
+    $customer = Customer::where(
+        'user_id',
+        $user->id
+    )->firstOrFail();
+
+    /*
+    ============================================
+    2- التأكد أن الطلب يعود لهذا الزبون
+    ============================================
+    */
+
+    if ($serviceRequest->customer_id != $customer->id) {
+
+        throw ValidationException::withMessages([
+            'request' => [
+                'This request does not belong to you.'
+            ]
+        ]);
+    }
+
+    /*
+    ============================================
+    3- تحميل العلاقات المطلوبة
+    ============================================
+    */
+
+    return $serviceRequest->load([
+
+        'serviceCategory',
+
+        'images',
+
+        'offers.serviceProvider.user'
+
+    ]);
+}
+
+
+
 }

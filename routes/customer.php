@@ -4,14 +4,28 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Customer\AuthController;
 use App\Http\Controllers\Customer\OfferController;
+use App\Http\Controllers\Customer\CategoryController;
+use App\Http\Controllers\Customer\ReviewController;
 use App\Http\Controllers\Customer\ServiceRequestController;
+ use App\Http\Controllers\Customer\HomeController;
 Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
 
     Route::post('/store-service-requests', [ServiceRequestController::class, 'store']);
 
-    Route::get('/service-requests/{serviceRequest}/offers', [OfferController::class, 'index']);
+    Route::get('/service-requests/{serviceRequest}/offers', [OfferController::class, 'allOffer']);
+ Route::get('/service-requests', [ServiceRequestController::class,'allRequest']);
+Route::get('/service-requests/{serviceRequest}',[ServiceRequestController::class, 'showRequest']);
+    Route::get('/offers/{offer}', [OfferController::class, 'showOffer']);
+Route::post('/offers/{offer}/accept', [OfferController::class, 'acceptOffer']);
+    Route::get('/categories', [CategoryController::class,'allCategory']);
+  
+    Route::get('/categories/search', [CategoryController::class,'searchCategory']);
+      Route::get('/categories/{serviceCategory}', [CategoryController::class,'showCategory']);
 
-    Route::get('/offers/{offer}', [OfferController::class, 'show']);
+      Route::post('/reviews', [ReviewController::class, 'review']);
+
+
+      Route::get('/home_customer', [HomeController::class, 'HomeCustomer']);
 
 });
 Route::prefix('auth')->group(function () {

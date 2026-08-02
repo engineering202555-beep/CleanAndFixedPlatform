@@ -15,9 +15,9 @@ class OfferController extends Controller
         private OfferService $offerService
     ) {}
 
-    public function index(ServiceRequest $serviceRequest)
+    public function allOffer(ServiceRequest $serviceRequest)
     {
-        $offers = $this->offerService->index(
+        $offers = $this->offerService->allOffer(
             auth()->user(),
             $serviceRequest
         );
@@ -26,11 +26,11 @@ class OfferController extends Controller
     }
 
     
-public function show(Offer $offer)
+public function showOffer(Offer $offer)
 {
     return new OfferDetailsResource(
 
-        $this->offerService->show(
+        $this->offerService->showOffer(
             auth()->user(),
             $offer
         )
@@ -38,7 +38,17 @@ public function show(Offer $offer)
     );
 }
 
+public function acceptOffer(Offer $offer)
+{
+    return response()->json(
 
+        $this->offerService->acceptOffer(
+            auth()->user(),
+            $offer
+        )
+
+    );
+}
 
 
 
