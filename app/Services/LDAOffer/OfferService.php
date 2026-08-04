@@ -81,7 +81,7 @@ class OfferService
             ]
         ]);
     }
-
+  
     return $offer->load([
         'serviceProvider.user',
         'serviceRequest'
@@ -160,6 +160,27 @@ public function acceptOffer(User $user, Offer $offer)
             'status' => 'accepted'
         ]);
 
+        /*
+=========================================
+First Order Discount
+
+The discount is granted only once.
+
+After using it we mark:
+
+customer->first_order_discount_used = true
+=========================================
+*/
+if (!$customer->first_order_discount_used) {
+
+    // هنا تحسبين الخصم
+
+    $customer->update([
+
+        'first_order_discount_used' => true
+
+    ]);
+}
         /*
         ==========================================
         6- رفض بقية العروض

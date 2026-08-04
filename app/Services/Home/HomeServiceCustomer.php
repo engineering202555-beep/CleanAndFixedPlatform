@@ -8,7 +8,7 @@ use App\Models\ServiceCategory;
 use App\Models\ServiceRequest;
 use App\Models\User;
 
-class HomeService
+class HomeServiceCustomer
 {
     public function HomeCustomer(User $user): array
     {
@@ -52,10 +52,7 @@ class HomeService
         ============================================
         */
 
-        $firstOrderOffer = ServiceRequest::where(
-            'customer_id',
-            $customer->id
-        )->doesntExist();
+       $firstOrderOffer = !$customer->first_order_discount_used;
 
         return [
 

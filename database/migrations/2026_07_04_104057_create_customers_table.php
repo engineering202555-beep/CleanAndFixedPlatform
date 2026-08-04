@@ -18,6 +18,7 @@ return new class extends Migration
             $table->enum('status', ['active', 'blocked'])->default('active');
             $table->unsignedTinyInteger('counter_urgent_requests_during_day')->default(0); // 2 فقط
             $table->unsignedTinyInteger('counter_cancel_by_system')->default(0);
+            $table->boolean('first_order_discount_used')->default(false);
             $table->string('block_reason')->nullable();
             $table->timestamp('blocked_until')->nullable();
             $table->softDeletes();

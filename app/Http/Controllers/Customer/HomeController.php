@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Customer\HomeResource;
-use App\Services\Home\HomeService;
+use App\Services\Home\HomeServiceCustomer;
 
 class HomeController extends Controller
 {
