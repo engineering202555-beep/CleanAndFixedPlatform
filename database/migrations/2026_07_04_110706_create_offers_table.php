@@ -25,6 +25,10 @@ return new class extends Migration
             $table->unsignedSmallInteger('duration_in_minutes')->default(60);  //مدة العرض هي نصف ساعة بحالة pending
             $table->dateTime('expires_at');   // هذه المدة هي = لحظة انشاء العرض + 30
             $table->timestamps();
+            $table->index(
+                ['service_provider_id','service_request_id'],
+                'offers_provider_request_idx'
+            );
         });
     }
 

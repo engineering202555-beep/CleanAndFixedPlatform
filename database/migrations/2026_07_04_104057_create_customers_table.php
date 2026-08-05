@@ -23,6 +23,9 @@ return new class extends Migration
             $table->timestamp('blocked_until')->nullable();
             $table->softDeletes();
             $table->timestamps();
+
+            // Indexes
+            $table->index('created_at');
         });
     }
 

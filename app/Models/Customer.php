@@ -22,6 +22,10 @@ class Customer extends Model
         'first_order_discount_used'
     ];
 
+    protected $casts = [
+        'blocked_until' => 'datetime',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

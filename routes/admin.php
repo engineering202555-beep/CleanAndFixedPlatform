@@ -2,10 +2,16 @@
 
 
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\BlockedProviderController;
+use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\CustomerGrowthStatsController;
+use App\Http\Controllers\Admin\CustomerManageController;
+use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\ServiceProviderController;
 use App\Http\Controllers\Admin\ServiceProviderRequestsController;
 use App\Http\Controllers\Admin\ServiceProvidersManageController;
 use App\Http\Controllers\Admin\ServiceProviderSubscriptionsController;
+use App\Http\Controllers\Admin\ServiceRequestGrowthStatsController;
 use App\Http\Resources\Admin\ServiceProviderBlockedResource;
 use Illuminate\Support\Facades\Route;
 
@@ -23,7 +29,7 @@ use Illuminate\Support\Facades\Route;
     ])->group(function () {
 
         Route::post('/logout', [AuthController::class, 'logout']);
-
+/////Service Providers Section:
         Route::get('/service-providers', [ServiceProviderController::class, 'getApprovedProviders']);
         Route::get('/service-provider/{serviceProvider}', [ServiceProviderController::class, 'getInfoProvider']);
         Route::get('/service-providers-pending', [ServiceProviderController::class, 'getPendingProviders']);
@@ -41,6 +47,17 @@ use Illuminate\Support\Facades\Route;
         Route::patch('/unblock/{serviceProvider}', [ServiceProvidersManageController::class, 'unblock']);
         Route::get('/service-providers-blocked', [ServiceProviderController::class, 'getBlockedProviders']);
         Route::patch('/service-providers-complimentary-month/{serviceProvider}', [ServiceProviderSubscriptionsController::class,'grantComplimentarySubscription']);
+////////Customers Section:
+        Route::get('/customers', [CustomerController::class, 'getCustomersByFilter']);
+        Route::get('/customers-blocked', [CustomerController::class, 'getCustomersBlocked']);
+
+        Route::delete('/delete-customer/{customer}', [CustomerManageController::class, 'destroy']);
+        Route::patch('/block-customer/{customer}', [CustomerManageController::class, 'block']);
+        Route::patch('/unblock-customer/{customer}', [CustomerManageController::class, 'unblock']);
+        Route::get('/reviews', [ReviewController::class, 'index']);
+        Route::get('/blocked-providers-by-customers', [BlockedProviderController::class, 'index'])->name('customers.blocked-providers.index');
+        Route::get('/stats-customers-growth', CustomerGrowthStatsController::class)->name('stats.customers-growth');
+        Route::get('/stats-service-requests-growth', ServiceRequestGrowthStatsController::class)->name('stats.service-requests-growth');
     });
 
 

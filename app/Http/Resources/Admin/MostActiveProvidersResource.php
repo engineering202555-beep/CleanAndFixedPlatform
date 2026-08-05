@@ -19,7 +19,10 @@ class MostActiveProvidersResource extends JsonResource
             'full_name'           => trim($this->user->first_name.' '.$this->user->last_name),
             'phone_number'        => $this->user->phone_number,
             'category'            => $this->serviceCategory->name,
-            'area'                => $this->serviceArea->name,
+            'service_area' => [
+                'city' => $this->serviceArea->city,
+                'area' => $this->serviceArea->area_name,
+            ],
             'experience_years'    => $this->experience_years,
             'rating'              => (float) $this->rating,
             'working_hours'       => [

@@ -16,6 +16,10 @@ return new class extends Migration
             $table->foreignId('service_provider_id')->constrained()->cascadeOnDelete();
             $table->foreignId('customer_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
+            $table->index(
+                ['customer_id','service_provider_id'],
+                'blocked_customer_provider_idx'
+            );
         });
     }
 

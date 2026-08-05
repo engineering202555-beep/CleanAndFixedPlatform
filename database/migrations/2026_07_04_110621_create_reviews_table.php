@@ -19,6 +19,8 @@ return new class extends Migration
             $table->text('comment')->nullable();
             $table->unsignedTinyInteger('provider_rating');
             $table->timestamps();
+            $table->index('provider_rating');
+            $table->index('created_at');
         });
     }
 

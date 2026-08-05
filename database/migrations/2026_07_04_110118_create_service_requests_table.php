@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('service_requests', function (Blueprint $table) {
             $table->id();
             $table->foreignId('customer_id')->constrained()->cascadeOnDelete();
-      
+
             $table->foreignId('service_category_id')->constrained()->cascadeOnDelete();
             $table->foreignId('service_area_id')->constrained()->cascadeOnDelete();
 
@@ -42,9 +42,13 @@ return new class extends Migration
             $table->decimal('longitude_y', 10, 7);
             $table->boolean('is_urgent')->default(false);
             $table->unsignedSmallInteger('duration_in_minutes')->default(60);  //مدة الطلب نصف ساعة
-            $table->dateTime('expires_at');   // هذه المدة هي = لحظة انشاء الطلب + ساعة
-           // 3 فقط
+            $table->dateTime('expires_at');   // هذه المدة هي = لحظة انشاء الطلب + ساعة// 3 فقط
             $table->timestamps();
+            // Composite Index
+            $table->index(
+                ['created_at','request_type','service_category_id','status'],
+                'sr_growth_filters_idx'
+            );
         });
     }
 

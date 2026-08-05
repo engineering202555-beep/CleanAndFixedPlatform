@@ -1,5 +1,6 @@
 <?php
 
+use App\Console\Commands\UnblockExpiredCustomers;
 use App\Console\Commands\UnblockExpiredProviders;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
@@ -12,5 +13,6 @@ Artisan::command('inspire', function () {
 Schedule::command('app:reset-urgent-requests-counter')
     ->dailyAt('00:00');
 
-Schedule::command(UnblockExpiredProviders::class)
-    ->hourly();
+//Admin Section:
+Schedule::command(UnblockExpiredProviders::class)->hourly();
+Schedule::command(UnblockExpiredCustomers::class)->hourly();

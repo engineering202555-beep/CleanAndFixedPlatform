@@ -37,7 +37,7 @@ class CustomerSeeder extends Seeder
 
         foreach ($customers as $index => $customer) {
 
-            $user = User::create([
+            $user = User::updateOrCreate([
                 'first_name' => $customer[0],
                 'last_name' => $customer[1],
                 'phone_number' => '0999000' . str_pad($index + 1, 3, '0', STR_PAD_LEFT),
@@ -45,7 +45,7 @@ class CustomerSeeder extends Seeder
                 'phone_verified_at' => now(),
             ]);
 
-            Customer::create([
+            Customer::updateOrCreate([
                 'user_id' => $user->id,
                 'service_area_id' => rand(1, 12),
                 'status' => 'active',
