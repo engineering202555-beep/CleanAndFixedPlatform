@@ -28,6 +28,10 @@ return new class extends Migration
             $table->enum('status', ['pending', 'in_review', 'resolved','rejected'])->default('pending');
             $table->text('admin_notes')->nullable();
             $table->timestamps();
+
+            // Complaints by Area: الـ Join على service_request_id + التاريخ
+            $table->index(['service_request_id', 'created_at'], 'complaints_request_date_idx');
+
         });
     }
 

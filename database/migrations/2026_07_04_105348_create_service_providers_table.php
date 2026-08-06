@@ -31,6 +31,9 @@ return new class extends Migration
             $table->timestamp('blocked_until')->nullable();
             $table->softDeletes();
             $table->timestamps();
+
+            // Supply/Demand + Provider Distribution: نفس التركيبة المطلوبة بكل الاستعلامين
+            $table->index(['service_area_id', 'service_category_id', 'account_status'], 'sp_area_category_status_idx');
         });
     }
 

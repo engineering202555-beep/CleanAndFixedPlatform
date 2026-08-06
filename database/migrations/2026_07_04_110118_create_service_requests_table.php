@@ -44,12 +44,16 @@ return new class extends Migration
             $table->unsignedSmallInteger('duration_in_minutes')->default(60);  //مدة الطلب نصف ساعة
             $table->dateTime('expires_at');   // هذه المدة هي = لحظة انشاء الطلب + ساعة// 3 فقط
             $table->timestamps();
+
             // Composite Index
-            $table->index(
-                ['created_at','request_type','service_category_id','status'],
-                'sr_growth_filters_idx'
-            );
+            $table->index(['created_at','request_type','service_category_id','status'], 'sr_growth_filters_idx');
+            // Hot Areas + Supply/Demand: تصفية بالمنطقة+التصنيف+التاريخ سوا
+            $table->index(['service_area_id', 'service_category_id', 'created_at'], 'sr_area_category_date_idx');
+            // Heat Map: نطاق زمني + جلب الإحداثيات مباشرة بدون Full Scan
+            $table->index(['created_at', 'latitude_x', 'longitude_y'], 'sr_density_idx');
+
         });
+
     }
 
     /**
@@ -58,5 +62,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('service_requests');
+        Schema::table('service_requests', function (Blueprint $table) {
+            $table->dropIndex('sr_area_category_date_idx');
+            $table->dropIndex('sr_density_idx');
+        });
     }
 };
