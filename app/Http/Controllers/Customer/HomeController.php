@@ -4,12 +4,12 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Customer\HomeResource;
-use App\Services\Home\HomeServiceCustomer;
+use App\Services\Home\HomeCustomerService;
 
 class HomeController extends Controller
 {
     public function __construct(
-        private HomeService $homeService
+        private HomeCustomerService $homeService
     ) {}
 
     public function HomeCustomer()

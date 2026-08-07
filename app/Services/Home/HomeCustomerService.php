@@ -8,7 +8,7 @@ use App\Models\ServiceCategory;
 use App\Models\ServiceRequest;
 use App\Models\User;
 
-class HomeServiceCustomer
+class HomeCustomerService
 {
     public function HomeCustomer(User $user): array
     {
