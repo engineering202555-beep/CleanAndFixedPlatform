@@ -51,6 +51,8 @@ return new class extends Migration
             $table->index(['service_area_id', 'service_category_id', 'created_at'], 'sr_area_category_date_idx');
             // Heat Map: نطاق زمني + جلب الإحداثيات مباشرة بدون Full Scan
             $table->index(['created_at', 'latitude_x', 'longitude_y'], 'sr_density_idx');
+            // "أكثر الأنواع طلباً" بتفلتر بالتصنيف + التاريخ سوا دايماً
+            $table->index(['service_category_id', 'created_at'], 'sr_category_date_idx');
 
         });
 
@@ -62,9 +64,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('service_requests');
-        Schema::table('service_requests', function (Blueprint $table) {
-            $table->dropIndex('sr_area_category_date_idx');
-            $table->dropIndex('sr_density_idx');
-        });
     }
 };

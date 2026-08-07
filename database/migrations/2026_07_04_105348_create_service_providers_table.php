@@ -34,6 +34,9 @@ return new class extends Migration
 
             // Supply/Demand + Provider Distribution: نفس التركيبة المطلوبة بكل الاستعلامين
             $table->index(['service_area_id', 'service_category_id', 'account_status'], 'sp_area_category_status_idx');
+            if (! $this->indexExists('service_providers', 'service_category_id')) {
+                $table->index('service_category_id');
+            }
         });
     }
 
@@ -43,5 +46,18 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('service_providers');
+    }
+
+    private function indexExists(string $table, string $column): bool
+    {
+        $indexes = Schema::getIndexes($table);
+
+        foreach ($indexes as $index) {
+            if (in_array($column, $index['columns'], true)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 };

@@ -11,6 +11,8 @@ use App\Http\Controllers\Admin\CustomerGrowthStatsController;
 use App\Http\Controllers\Admin\CustomerManageController;
 use App\Http\Controllers\Admin\PriceIntelligenceController;
 use App\Http\Controllers\Admin\ReviewController;
+use App\Http\Controllers\Admin\ServiceCategoryController;
+use App\Http\Controllers\Admin\ServiceCategoryStatsController;
 use App\Http\Controllers\Admin\ServiceProviderController;
 use App\Http\Controllers\Admin\ServiceProviderRequestsController;
 use App\Http\Controllers\Admin\ServiceProvidersManageController;
@@ -90,6 +92,21 @@ use Illuminate\Support\Facades\Route;
                 Route::get('price-trend', [PriceIntelligenceController::class, 'monthlyTrend'])->name('price-trend');
 
             });
+
+        /////Service areas section:
+        Route::prefix('service-categories')->name('service-categories.')->group(function () {
+
+            Route::get('/', [ServiceCategoryController::class, 'index'])->name('index');
+            Route::post('/', [ServiceCategoryController::class, 'store'])->name('store');
+            Route::patch('{serviceCategory}', [ServiceCategoryController::class, 'update'])->name('update');
+            Route::delete('{serviceCategory}', [ServiceCategoryController::class, 'destroy'])->name('destroy');
+
+            Route::prefix('stats')->name('stats.')->group(function () {
+                Route::get('most-requested', [ServiceCategoryStatsController::class, 'mostRequested'])->name('most-requested');
+                Route::get('provider-distribution', [ServiceCategoryStatsController::class, 'providerDistribution'])->name('provider-distribution');
+            });
+
+        });
 
     });
 
