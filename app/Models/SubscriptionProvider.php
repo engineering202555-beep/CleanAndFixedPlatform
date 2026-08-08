@@ -19,13 +19,17 @@ class SubscriptionProvider extends Model
         'status',
         'used_requests',
         'is_complimentary',
+        'price_paid',
+        'requests_limit',
     ];
 
     protected function casts(): array
     {
         return [
-            'starts_at' => 'datetime',
-            'ends_at' => 'datetime',
+            'starts_at'        => 'datetime',
+            'ends_at'          => 'datetime',
+            'is_complimentary' => 'boolean',
+            'price_paid'       => 'decimal:2',
         ];
     }
 

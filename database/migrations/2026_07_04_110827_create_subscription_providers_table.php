@@ -20,6 +20,9 @@ return new class extends Migration
             $table->enum('status', ['pending_payment','active', 'cancelled'])->default('active');
             $table->unsignedSmallInteger('used_requests')->default(0);
             $table->boolean('is_complimentary')->default(false);
+
+            $table->decimal('price_paid', 8, 2)->nullable();
+            $table->unsignedSmallInteger('requests_limit')->nullable();
             $table->timestamps();
         });
     }
