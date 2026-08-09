@@ -13,7 +13,9 @@ class SubscriptionSeeder extends Seeder
      */
     public function run(): void
     {
-       Subscription::insert([
+        $now = now();
+
+        Subscription::insert([
 
                [
                    'type' => 'free',
@@ -21,7 +23,9 @@ class SubscriptionSeeder extends Seeder
                    'price' => 0.00,
                    'duration_in_days' => 30,
                    'description' => 'الباقة التجريبية المجانية، تتيح للمزود استقبال حتى 3 طلبات صيانة شهرياً لاختبار جودة التطبيق.',
-                   'is_active' => true
+                   'is_active' => true,
+                   'created_at' => $now,
+                   'updated_at' => $now,
                ],
                [
                    'type' => 'paid',
@@ -29,7 +33,9 @@ class SubscriptionSeeder extends Seeder
                    'price' => 75000.00, // 75,000 ليرة سورية شهرياً
                    'duration_in_days' => 30,
                    'description' => 'باقة الحرفي النشط الفضية، تتيح استقبال لغاية 100 طلباً شهرياً لزيادة فرصة الحصول على زبائن.',
-                   'is_active' => true
+                   'is_active' => true ,
+                   'created_at' => $now,
+                   'updated_at' => $now,
                ],
                [
                    'type' => 'paid',
@@ -37,7 +43,9 @@ class SubscriptionSeeder extends Seeder
                    'price' => 180000.00, // 180,000 ليرة سورية شهرياً للورش الكبيرة
                    'duration_in_days' => 30,
                    'description' => 'الباقة الذهبية الممتازة للورش والشركات، تتيح استقبال حتى 120 طلباً شهرياً مع أولوية في الدعم الفني.',
-                   'is_active' => true
+                   'is_active' => true,
+                   'created_at' => $now,
+                   'updated_at' => $now,
                ],
        ]);
     }

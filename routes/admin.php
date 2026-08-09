@@ -6,6 +6,9 @@ use App\Http\Controllers\Admin\AreaStatsController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\BlockedProviderController;
 use App\Http\Controllers\Admin\CityController;
+use App\Http\Controllers\Admin\ComplaintController;
+use App\Http\Controllers\Admin\ComplaintStatsController;
+use App\Http\Controllers\Admin\ComplaintStatusController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\CustomerGrowthStatsController;
 use App\Http\Controllers\Admin\CustomerManageController;
@@ -18,6 +21,10 @@ use App\Http\Controllers\Admin\ServiceProviderRequestsController;
 use App\Http\Controllers\Admin\ServiceProvidersManageController;
 use App\Http\Controllers\Admin\ServiceProviderSubscriptionsController;
 use App\Http\Controllers\Admin\ServiceRequestGrowthStatsController;
+use App\Http\Controllers\Admin\SubscriptionActivationController;
+use App\Http\Controllers\Admin\SubscriptionPlanController;
+use App\Http\Controllers\Admin\SubscriptionProviderController;
+use App\Http\Controllers\Admin\SubscriptionRevenueStatsController;
 use App\Http\Resources\Admin\ServiceProviderBlockedResource;
 use Illuminate\Support\Facades\Route;
 
@@ -106,6 +113,33 @@ use Illuminate\Support\Facades\Route;
                 Route::get('provider-distribution', [ServiceCategoryStatsController::class, 'providerDistribution'])->name('provider-distribution');
             });
 
+        });
+
+        // خطط الاشتراك
+        Route::prefix('subscription-plans')->name('subscription-plans.')->group(function () {
+            Route::get('/', [SubscriptionPlanController::class, 'index'])->name('index');
+            Route::get('{subscription}', [SubscriptionPlanController::class, 'show'])->name('show');
+            Route::post('/', [SubscriptionPlanController::class, 'store'])->name('store');
+            Route::patch('{subscription}', [SubscriptionPlanController::class, 'update'])->name('update');
+            Route::delete('{subscription}', [SubscriptionPlanController::class, 'destroy'])->name('destroy');
+        });
+
+        // اشتراكات مقدمي الخدمة
+        Route::prefix('provider-subscriptions')->name('provider-subscriptions.')->group(function () {
+            Route::get('/', [SubscriptionProviderController::class, 'index'])->name('index');
+            Route::get('{subscriptionProvider}', [SubscriptionProviderController::class, 'show'])->name('show');
+            Route::patch('activate/{subscriptionProvider}', SubscriptionActivationController::class)->name('activate');
+        });
+//ارباح المنصة :
+        Route::get('stats/subscriptions-revenue', SubscriptionRevenueStatsController::class)->name('stats.subscriptions-revenue');
+/////complaints:
+        Route::prefix('complaints')->name('complaints.')->group(function () {
+            // ثابت (stats) لازم قبل {complaint} الديناميكي، تفادياً لأي التباس مستقبلي
+            Route::get('stats', ComplaintStatsController::class)->name('stats');
+
+            Route::get('/', [ComplaintController::class, 'index'])->name('index');
+            Route::get('{complaint}', [ComplaintController::class, 'show'])->name('show');
+            Route::patch('/status/{complaint}', ComplaintStatusController::class)->name('status');
         });
 
     });

@@ -11,7 +11,6 @@ class ServiceRequest extends Model
 
     protected $fillable = [
         'customer_id',
-      
         'service_category_id',
         'service_area_id',
         'request_type',
@@ -23,7 +22,7 @@ class ServiceRequest extends Model
         'is_urgent',
         'expires_at',
         'duration_in_minutes',
-     
+
     ];
 
     protected function casts(): array
@@ -60,6 +59,11 @@ class ServiceRequest extends Model
     public function offers()
     {
         return $this->hasMany(Offer::class);
+    }
+
+    public function acceptedOffer()
+    {
+        return $this->hasOne(Offer::class)->where('status', 'accepted');
     }
 
     public function review()

@@ -24,6 +24,14 @@ return new class extends Migration
             $table->decimal('price_paid', 8, 2)->nullable();
             $table->unsignedSmallInteger('requests_limit')->nullable();
             $table->timestamps();
+
+            // يخدم كل استعلامات الإيراد سوا: فلترة الأهلية
+            // (price_paid + is_complimentary) + التجميع الزمني (starts_at)
+            // + التجميع حسب الخطة (subscription_id) بضربة واحدة.
+            $table->index(
+                ['is_complimentary', 'price_paid', 'starts_at', 'subscription_id'],
+                'sp_revenue_idx'
+            );
         });
     }
 

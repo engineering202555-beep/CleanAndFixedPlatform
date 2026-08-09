@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\ServiceProvider;
+use App\Models\Subscription;
 use App\Models\SubscriptionProvider;
 use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -10,50 +11,67 @@ use Illuminate\Database\Seeder;
 
 class SubscriptionProviderSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        $providers = ServiceProvider::where('account_status', 'active')->get();
+        // احذف بيانات الـ seeder السابقة فقط
+        SubscriptionProvider::query()->delete();
+
+        $providers = ServiceProvider::query()
+            ->where('account_status', 'active')
+            ->orderBy('id')
+            ->get();
+
+        $subscriptions = Subscription::query()
+            ->whereIn('id', [1, 2, 3])
+            ->get()
+            ->keyBy('id');
 
         foreach ($providers as $index => $provider) {
 
-            if ($index < 6) {
-                $subscriptionId = 1; // Free
-            } elseif ($index < 11) {
-                $subscriptionId = 2; // Silver
-            } else {
-                $subscriptionId = 3; // Gold
+            $subscriptionId = match (true) {
+                $index < 6 => 1,
+                $index < 11 => 2,
+                default => 3,
+            };
+
+            $subscription = $subscriptions->get($subscriptionId);
+
+            if (! $subscription) {
+                continue;
             }
 
-            if ($subscriptionId == 1) {
+            $status = match ($index % 3) {
+                0 => 'active',
+                1 => 'pending_payment',
+                default => 'cancelled',
+            };
 
-                $usedRequests = rand(0, 3);
+            $startsAt = Carbon::now()->subDays(rand(0, 20));
 
-            } elseif ($subscriptionId == 2) {
+            $endsAt = $startsAt->copy()
+                ->addDays($subscription->duration_in_days);
 
-                $usedRequests = rand(0, 100);
-
-            } else {
-
-                $usedRequests = rand(0, 120);
-            }
+            $usedRequests = rand(
+                0,
+                $subscription->requests_per_month
+            );
 
             SubscriptionProvider::create([
-
                 'service_provider_id' => $provider->id,
-                'subscription_id' => $subscriptionId,
+                'subscription_id' => $subscription->id,
 
-                'starts_at' => Carbon::now(),
+                'starts_at' => $startsAt,
+                'ends_at' => $endsAt,
 
-                'ends_at' => Carbon::now()->addDays(30),
-
-                'status' => 'active',
+                'status' => $status,
 
                 'used_requests' => $usedRequests,
 
-                'is_complimentary'=> false
+                // Snapshot
+                'requests_limit' => $subscription->requests_per_month,
+                'price_paid' => $subscription->price,
+
+                'is_complimentary' => false,
             ]);
         }
     }
