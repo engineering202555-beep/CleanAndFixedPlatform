@@ -79,4 +79,13 @@ class User extends Authenticatable
     {
         return $this->hasMany(Notification::class);
     }
+
+
+
+    public function fcmTokens()
+{
+    return $this->hasMany(FcmToken::class);
+}
+
+
 }

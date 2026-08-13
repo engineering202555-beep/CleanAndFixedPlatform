@@ -42,16 +42,16 @@ return [
     'token' => env('ULTRAMSG_TOKEN'),
 ],
 
-/*'otp' => [
+'otp' => [
 
     'driver' => env('OTP_DRIVER', 'fake'),
 
-],*/
-'otp' => [
+],
+/*'otp' => [
 
     'driver' => env('OTP_DRIVER', 'whatsapp'),
 
-],
+],*/
 
 
 

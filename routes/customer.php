@@ -8,6 +8,8 @@ use App\Http\Controllers\Customer\CategoryController;
 use App\Http\Controllers\Customer\ReviewController;
 use App\Http\Controllers\Customer\ServiceRequestController;
  use App\Http\Controllers\Customer\HomeController;
+ use App\Http\Controllers\Customer\ProfileController;
+  use App\Http\Controllers\Customer\FcmTokenController;
 Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
 
     Route::post('/store-service-requests', [ServiceRequestController::class, 'store']);
@@ -24,10 +26,27 @@ Route::post('/offers/{offer}/accept', [OfferController::class, 'acceptOffer']);
 
       Route::post('/reviews', [ReviewController::class, 'review']);
 
+ Route::get(
+        '/customer/profile',
+        [ProfileController::class, 'showProfileCustomer']
+    );
 
-      Route::get('/home_customer', [HomeController::class, 'HomeCustomer']);
+
+    Route::put(
+    '/customer/Updateprofile',
+    [ProfileController::class, 'updateProfileCustomer']
+);
+
+
+Route::post('/customer/profile/image',[ProfileController::class, 'updateImageProfileCustomer']);
+Route::get('/home_customer', [HomeController::class, 'HomeCustomer']);
+
+
+      Route::post('/customer/fcm-token',[FcmTokenController::class, 'saveToken']);
 
 });
+
+
 Route::prefix('auth')->group(function () {
 
     Route::post('/register', [AuthController::class, 'register']);
