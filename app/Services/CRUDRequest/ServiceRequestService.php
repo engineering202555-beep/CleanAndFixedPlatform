@@ -127,7 +127,7 @@ $status = 'pending_local';
 
 $hasLocalProvider = ServiceProvider::where(
         'service_area_id',
-        $customer->service_area_id
+      $data['service_area_id']
     )
     ->where('availability_status', 'available')
     ->exists();
@@ -136,7 +136,14 @@ if (!$hasLocalProvider) {
 
     $status = 'pending_global';
 }
+  /*
 
+        $status = $hasLocalProvider
+            ? 'pending_local'
+            : 'pending_global';
+
+
+        /*
 
 
 
@@ -167,7 +174,7 @@ if (!$hasLocalProvider) {
 
                 'service_category_id' => $data['service_category_id'],
 
-                'service_area_id' =>$customer->service_area_id,
+                'service_area_id' =>$data['service_area_id'],
 
                 'request_type' => $data['request_type'],
 

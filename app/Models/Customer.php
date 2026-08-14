@@ -19,7 +19,8 @@ class Customer extends Model
         'block_reason',
         'counter_urgent_requests_during_day',
         'counter_cancel_by_system',
-        'first_order_discount_used'
+        'first_order_discount_used',
+        'profile_image'
     ];
 
     protected $casts = [

@@ -3,44 +3,54 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Customer\ProfileResource;
+use App\Http\Resources\Customer\CustomerResource;
 use App\Services\Customer\ProfileService;
 use Illuminate\Http\Request;
-use App\Http\Requests\Customer\UpdateProfileImageRequest;
-use App\Http\Requests\Customer\UpdateProfileRequest;
+use App\Http\Requests\Customer\UpdateCustomerProfileImageRequest;
+use App\Http\Requests\Customer\UpdateCustomerProfileRequest;
 class ProfileController extends Controller
 {
     public function __construct(
         private ProfileService $profileService
     ) {}
 
-    public function showProfileCustomer(Request $request)
-    {
-        $customer = $this->profileService->showProfileCustomer(
-            $request->user()
-        );
-
-        return new ProfileResource($customer);
-    }
-
-    public function updateProfileCustomer(UpdateProfileRequest $request)
+    public function showProfileCustomer()
 {
+    return response()->json([
+        'data' => new CustomerResource(
+            $this->profileService->showProfileCustomer(
+                auth()->user()
+            )
+        )
+    ]);  
+}
+
+  public function updateProfileCustomer(
+    UpdateCustomerProfileRequest $request
+) {
     $customer = $this->profileService->updateProfileCustomer(
-        $request->user(),
+        auth()->user(),
         $request->validated()
     );
 
-    return new ProfileResource($customer);
+    return response()->json([
+        'message' => 'Profile updated successfully.',
+        'data' => new CustomerResource($customer),
+    ]);
 }
 
-public function updateImageProfileCustomer(UpdateProfileImageRequest $request)
-{
+public function updateImageProfileCustomer(
+    UpdateCustomerProfileImageRequest $request
+) {
     $customer = $this->profileService->updateImageProfileCustomer(
-        $request->user(),
-        $request->file('image')
+        auth()->user(),
+        $request->file('profile_image')
     );
 
-    return new ProfileResource($customer);
+    return response()->json([
+        'message' => 'Profile image updated successfully.',
+        'data' => new CustomerResource($customer),
+    ]);
 }
 
 
