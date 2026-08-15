@@ -17,6 +17,11 @@ Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
     Route::get('/service-requests/{serviceRequest}/offers', [OfferController::class, 'allOffer']);
  Route::get('/service-requests', [ServiceRequestController::class,'allRequest']);
 Route::get('/service-requests/{serviceRequest}',[ServiceRequestController::class, 'showRequest']);
+ Route::put('/customer/service-requests/{serviceRequest}',[ServiceRequestController::class, 'updateRequest']);
+Route::patch('/customer/service-requests/{serviceRequest}/cancel',[ServiceRequestController::class, 'cancelRequest']);
+
+Route::patch('/customer/service-requests/{serviceRequest}/confirm',[ServiceRequestController::class, 'confirmService']);
+
     Route::get('/offers/{offer}', [OfferController::class, 'showOffer']);
 Route::post('/offers/{offer}/accept', [OfferController::class, 'acceptOffer']);
     Route::get('/categories', [CategoryController::class,'allCategory']);
@@ -42,7 +47,14 @@ Route::post('/customer/profile/image',[ProfileController::class, 'updateImagePro
 Route::get('/home_customer', [HomeController::class, 'HomeCustomer']);
 
 
+
+
+
+
       Route::post('/customer/fcm-token',[FcmTokenController::class, 'saveToken']);
+
+
+
 
 });
 
