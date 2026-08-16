@@ -135,7 +135,8 @@ $hasLocalProvider = ServiceProvider::where(
 if (!$hasLocalProvider) {
 
     $status = 'pending_global';
-}
+}  
+
   /*
 
         $status = $hasLocalProvider
