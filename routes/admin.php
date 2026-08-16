@@ -100,7 +100,7 @@ use Illuminate\Support\Facades\Route;
 
             });
 
-        /////Service areas section:
+        /////Service categories section:
         Route::prefix('service-categories')->name('service-categories.')->group(function () {
 
             Route::get('/', [ServiceCategoryController::class, 'index'])->name('index');

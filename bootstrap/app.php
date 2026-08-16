@@ -31,6 +31,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
             'force.password.change' => \App\Http\Middleware\ForcePasswordChange::class,
+            'provider.active' => \App\Http\Middleware\EnsureProviderAccountActive::class, // جديد
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

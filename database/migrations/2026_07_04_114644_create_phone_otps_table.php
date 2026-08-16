@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('phone', 20);
-            $table->string('code',6);
+            $table->string('code');
             $table->timestamp('expires_at');
             $table->boolean('verified')->default(false);
             $table->timestamps();

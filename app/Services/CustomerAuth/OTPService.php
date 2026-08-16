@@ -23,7 +23,7 @@ public function __construct(UltraMsgService $whatsApp)
 
     public function generate(User $user): void
 {
-    // حذف أي OTP قديم وغير مستخدم
+    // حذف أي Otp قديم وغير مستخدم
     PhoneOtp::where('user_id', $user->id)
         ->where('verified', false)
         ->delete();
@@ -51,11 +51,11 @@ if (config('services.otp.driver') === 'whatsapp') {
         $message
     );
 
-} 
+}
 
 else {
 
-    logger()->info("OTP for {$user->phone_number}: {$code}");
+    logger()->info("Otp for {$user->phone_number}: {$code}");
 
 }
 
@@ -70,7 +70,7 @@ else {
         // البحث عن المستخدم
         $user = User::where('phone_number', $phone)->firstOrFail();
 
-        // البحث عن آخر OTP صالح
+        // البحث عن آخر Otp صالح
         $otp = PhoneOtp::where('user_id', $user->id)
             ->where('phone', $phone)
             ->where('code', $code)
@@ -91,7 +91,7 @@ else {
     'otp' => ['انتهت صلاحية رمز التحقق.']
 ]); }
 
-        // تحديث حالة OTP
+        // تحديث حالة Otp
         $otp->update([
             'verified' => true,
         ]);

@@ -24,7 +24,7 @@ Log::info('Sending to WhatsApp', [
     'phone' => $phone,
 ]);
         if ($response->successful()) {
-            Log::info('WhatsApp OTP sent', [
+            Log::info('WhatsApp Otp sent', [
                 'phone' => $phone,
                 'response' => $response->json(),
             ]);
