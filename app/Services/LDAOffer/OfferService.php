@@ -6,11 +6,18 @@ use App\Models\Customer;
 use App\Models\ServiceRequest;
 use App\Models\User;
 use App\Models\offer;
+use App\Services\DistanceCalculation\DistanceService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class OfferService
 {
+
+
+   public function __construct(
+        protected DistanceService $distanceService
+    ) {
+    }
     public function allOffer(User $user, ServiceRequest $serviceRequest)
     {
         /*
@@ -51,19 +58,33 @@ class OfferService
         ==========================================
         */
 
-       return $serviceRequest->offers()
-
+       $offers = $serviceRequest->offers()
     ->with([
-
         'serviceProvider.user',
-
         'serviceProvider.reviews'
-
     ])
-
-    ->orderBy('price')
-
     ->get();
+
+$offers = $offers
+    ->map(function ($offer) use ($serviceRequest) {
+
+        $provider = $offer->serviceProvider;
+
+        $distance = $this->distanceService->calculate(
+            $serviceRequest->latitude_x,
+            $serviceRequest->longitude_y,
+            $provider->latitude,
+            $provider->longitude
+        );
+
+        $offer->distance = $distance;
+
+        return $offer;
+    })
+    ->sortBy('distance')
+    ->values();
+
+return $offers;
     }
 
 

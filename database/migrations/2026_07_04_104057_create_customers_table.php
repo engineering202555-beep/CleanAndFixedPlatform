@@ -21,6 +21,7 @@ return new class extends Migration
             $table->boolean('first_order_discount_used')->default(false);
             $table->string('block_reason')->nullable();
             $table->timestamp('blocked_until')->nullable();
+             $table->string('profile_image')->nullable();
             $table->softDeletes();
             $table->timestamps();
 

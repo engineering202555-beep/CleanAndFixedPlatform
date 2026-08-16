@@ -19,7 +19,10 @@ class StoreServiceRequestRequest extends FormRequest
             'required',
             'exists:service_categories,id'
         ],
-
+'service_area_id' => [
+            'required',
+            'exists:service_areas,id'
+        ],
         
 
         'request_type' => [
@@ -33,15 +36,17 @@ class StoreServiceRequestRequest extends FormRequest
             'max:1000'
         ],
 
-        'latitude_x' => [
-            'required',
-            'numeric'
-        ],
+       'latitude_x' => [
+                'required',
+                'numeric',
+                'between:-90,90',
+            ],
 
-        'longitude_y' => [
-            'required',
-            'numeric'
-        ],
+            'longitude_y' => [
+                'required',
+                'numeric',
+                'between:-180,180',
+            ],
 
         'is_urgent' => [
             'required',

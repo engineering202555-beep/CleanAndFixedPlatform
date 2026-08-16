@@ -58,7 +58,7 @@ class OfferResource extends JsonResource
             'duration_in_minutes' => $this->duration_in_minutes,
 
             'expires_at' => $this->expires_at,
-
+             'distance' => $this->distance,
             'created_at' => $this->created_at,
         ];
     }

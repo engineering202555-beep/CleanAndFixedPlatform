@@ -24,6 +24,7 @@ return new class extends Migration
                 'pending_global',   // جاري البحث ضمن نطاق المدينة كاملة
                 'processing', // تم ايجاد عروض
                 'accepted', // لقد اخترت عرضاً
+                'awaiting_confirmation',//تم انجاز العمل من قبل مقدم الخدمة وننتظر تاكيد الزبون  
                 'completed', // تم الدفع
                 'inspection_accepted', //الزبون اختار مقدم الخدمة للكشف
                 'inspection_in_progress', // مقدم الخدمة يقوم بالكشف.

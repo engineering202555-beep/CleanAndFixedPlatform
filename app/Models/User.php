@@ -12,8 +12,9 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable,HasRoles,HasApiTokens;
+    use HasFactory, Notifiable, HasRoles, HasApiTokens;
     use SoftDeletes;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -80,4 +81,10 @@ class User extends Authenticatable
         return $this->hasMany(Notification::class);
     }
 
+    public function fcmTokens()
+    {
+        return $this->hasMany(FcmToken::class);
+    }
 }
+
+

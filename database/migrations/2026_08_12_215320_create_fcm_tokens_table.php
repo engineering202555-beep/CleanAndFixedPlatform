@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('service_areas', function (Blueprint $table) {
+        Schema::create('fcm_tokens', function (Blueprint $table) {
             $table->id();
-            $table->string('city');
-            $table->string('area_name');
-         
+                        $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+                        $table->string('fcm_token')->unique();
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('service_areas');
+        Schema::dropIfExists('fcm_tokens');
     }
 };
