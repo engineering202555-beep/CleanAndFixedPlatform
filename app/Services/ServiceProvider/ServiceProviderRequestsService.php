@@ -97,11 +97,16 @@ class ServiceProviderRequestsService
 
         SubscriptionProvider::create([
             'service_provider_id' => $provider->id,
-            'subscription_id' => $subscription->id,
-            'starts_at' => now(),
-            'ends_at' => now()->addDays($subscription->duration_in_days),
-            'status' => 'active',
-            'used_requests' => 0,
+            'subscription_id'     => $subscription->id,
+            // كانوا ناقصين — نفس منطق Snapshot المطبّق بكل مكان تاني
+            // (SubscriptionActivationService)، هون بس القيم صفرية
+            // منطقياً لأنها الخطة المجانية.
+            'price_paid'          => $subscription->price,
+            'requests_limit'      => $subscription->requests_per_month,
+            'starts_at'           => now(),
+            'ends_at'             => now()->addDays($subscription->duration_in_days),
+            'status'              => 'active',
+            'used_requests'       => 0,
         ]);
     }
 }

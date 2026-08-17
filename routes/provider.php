@@ -5,12 +5,14 @@ use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\ServiceCategoryController;
 use App\Http\Controllers\ServiceProvider\FcmTokenController;
 use App\Http\Controllers\ServiceProvider\OfferController;
+use App\Http\Controllers\ServiceProvider\ProviderArchiveController;
 use App\Http\Controllers\ServiceProvider\ProviderPreferencesController;
 use App\Http\Controllers\ServiceProvider\ServiceRequestController;
 use App\Http\Controllers\ServiceProvider\AuthController;
 use App\Http\Controllers\ServiceProvider\ProfileServiceProviderController;
 
 use App\Http\Controllers\ServiceProvider\ProviderComplaintController;
+use App\Http\Controllers\ServiceProvider\SubscriptionController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -22,17 +24,10 @@ Route::get('/service-areas', [CityController::class, 'index'])->name('cities.ind
 
 Route::middleware(['auth:sanctum', 'role:provider','provider.active'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
-<<<<<<< HEAD
-=======
-    Route::get('/service-categories', [ServiceCategoryController::class, 'index']);
-    Route::get('/service-areas', [CityController::class, 'index'])->name('cities.index');
-       
-    
-    
+
     Route::get('/profileProvider',[ProfileServiceProviderController::class, 'showProfileServiceProvider']);
     Route::patch('/updateProfile',[ProfileServiceProviderController::class, 'updateProviderProfile']);
-       Route::post('updateImageProfile',[ProfileServiceProviderController::class, 'updateProfileImage']);
->>>>>>> 87c706574bdd68d9d1ec6f48148e63c593b09710
+    Route::post('updateImageProfile',[ProfileServiceProviderController::class, 'updateProfileImage']);
 
     Route::get('/requests', [ServiceRequestController::class, 'index']);
     Route::get('/requests/{serviceRequest}', [ServiceRequestController::class, 'show']);
@@ -43,13 +38,16 @@ Route::middleware(['auth:sanctum', 'role:provider','provider.active'])->group(fu
     Route::patch('/requests/finish/{serviceRequest}', [ServiceRequestController::class, 'finish']);
     Route::post('/fcm-token', [FcmTokenController::class, 'store']);
     Route::patch('/preferences/do-not-disturb', [ProviderPreferencesController::class, 'updateDoNotDisturb']);
+    Route::get('/requests-archive', ProviderArchiveController::class);
 //  Route::get('/offers', [OfferController::class, 'index']);
-
-
 
        Route::post('/storeProviderComplaint',[ProviderComplaintController::class, 'storeProviderComplaint']);
        Route::get('/providerComplaints',[ProviderComplaintController::class, 'getProviderComplaints']);
-       Route::get('complaintsAgainstProvider',[ProviderComplaintController::class, 'complaintsAgainstProvider']
-);
+       Route::get('complaintsAgainstProvider',[ProviderComplaintController::class, 'complaintsAgainstProvider']);
+
+    Route::get('/plans', [SubscriptionController::class, 'plans']);
+    Route::get('/current', [SubscriptionController::class, 'current']);
+    Route::post('/select', [SubscriptionController::class, 'select']);
+    Route::patch('/cancel', [SubscriptionController::class, 'cancel']);
 
 });
