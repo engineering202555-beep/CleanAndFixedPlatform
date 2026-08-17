@@ -10,7 +10,7 @@ class UltraMsgService
     public function send(string $phone, string $message): bool
     {
         $response = Http::asForm()->post(
-            config('services.ultramsg.base_url')
+            config('services.ultramsg.api_url')
             . '/'
             . config('services.ultramsg.instance_id')
             . '/messages/chat',

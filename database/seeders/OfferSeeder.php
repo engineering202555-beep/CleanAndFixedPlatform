@@ -115,7 +115,6 @@ class OfferSeeder extends Seeder
             'estimated_duration' => null,
             'status' => 'accepted',
             'notes' => 'سعر الكشف فقط، سعر التصليح يُحدد بعد الكشف الفعلي.',
-            'starts_at' => now()->addHours(rand(1, 24)),
             'duration_in_minutes' => 60,
             'expires_at' => now()->addMinutes(30),
         ]);
@@ -148,7 +147,6 @@ class OfferSeeder extends Seeder
             'estimated_duration' => [30, 60, 90, 120][array_rand([30, 60, 90, 120])],
             'status' => $status,
             'notes' => self::NOTES[array_rand(self::NOTES)],
-            'starts_at' => $futureSchedule ? now()->addDays(rand(1, 3)) : now()->subHours(rand(1, 48)),
             'duration_in_minutes' => 30,
             'expires_at' => $createdAt->copy()->addMinutes(30),
             'created_at' => $createdAt,

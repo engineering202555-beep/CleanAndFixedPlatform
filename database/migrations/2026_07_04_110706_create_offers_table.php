@@ -21,7 +21,6 @@ return new class extends Migration
             $table->unsignedSmallInteger('estimated_duration')->nullable(); //المدة التنفيذية
             $table->enum('status', ['pending', 'rejected','accepted'])->default('pending');
             $table->text('notes')->nullable(); // تتضمن هذخ الملاحظة المدة الزمنية ل
-            $table->dateTime('starts_at');
             $table->unsignedSmallInteger('duration_in_minutes')->default(60);  //مدة العرض هي نصف ساعة بحالة pending
             $table->dateTime('expires_at');   // هذه المدة هي = لحظة انشاء العرض + 30
             $table->timestamps();

@@ -26,6 +26,7 @@ class ServiceProvider extends Model
         'longitude',
         'working_from',
         'working_to',
+        'do_not_disturb',
         'availability_status',
         'account_status',
         'blocked_until'

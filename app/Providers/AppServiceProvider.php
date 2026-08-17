@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Offer;
+use App\Observers\OfferObserver;
+use App\Observers\ServiceRequestObserver;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use App\Models\ServiceProvider;
 use App\Models\ServiceRequest;
@@ -42,5 +46,28 @@ class AppServiceProvider extends BaseServiceProvider
             'service_request'  => ServiceRequest::class,
             'service_provider' => ServiceProvider::class,
         ]);
+
+        ServiceRequest::observe(ServiceRequestObserver::class);
+        Offer::observe(OfferObserver::class);
+
+       Event::listen(
+            NewServiceRequestEligible::class,
+            SendNewServiceRequestFcm::class,
+        );
+
+        Event::listen(
+            OfferAccepted::class,
+            HandleOfferAccepted::class,
+        );
+
+        Event::listen(
+            OfferSuperseded::class,
+            SendOfferSupersededFcm::class,
+        );
+
+        Event::listen(
+            ProviderUpdatedRequestStatus::class,
+            NotifyCustomerOfRequestUpdate::class,
+        );
     }
 }

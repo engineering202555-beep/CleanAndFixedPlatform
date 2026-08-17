@@ -12,7 +12,7 @@ class ProviderProfileResource extends JsonResource
         $provider = $this->serviceProvider;
 
         return [
-            'id'                  => $this->id,
+            'id'                  => $provider->id,
             'first_name'          => $this->first_name,
             'last_name'           => $this->last_name,
             'full_name'           => trim($this->first_name.' '.$this->last_name),
