@@ -15,8 +15,16 @@ class FcmTokenService
                 'fcm_token' => $token,
             ],
             [
+                'user_id' => $user->id,
                 'fcm_token' => $token,
             ]
         );
+    }
+
+    public function deleteToken(User $user, string $token): void
+    {
+        FcmToken::where('user_id', $user->id)
+            ->where('fcm_token', $token)
+            ->delete();
     }
 }

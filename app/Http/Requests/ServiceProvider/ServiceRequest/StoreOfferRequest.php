@@ -30,4 +30,13 @@ class StoreOfferRequest extends FormRequest
             'notes'               => ['nullable', 'string', 'max:500'],
         ];
     }
+
+    public function isDiagnosticPhase(): bool
+    {
+        $request = $this->route('serviceRequest');
+
+        return $request
+            && $request->request_type === 'unspecified_fault'
+            && in_array($request->status, ['pending_local', 'pending_global'], true);
+    }
 }

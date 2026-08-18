@@ -11,7 +11,7 @@ use App\Http\Controllers\Customer\ServiceRequestController;
  use App\Http\Controllers\Customer\ProfileController;
   use App\Http\Controllers\Customer\ComplaintController;
   use App\Http\Controllers\Customer\FcmTokenController;
-  
+  use App\Http\Controllers\Customer\CustomerFcmTokenController;
 Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
 
     Route::post('/store-service-requests', [ServiceRequestController::class, 'store']);
@@ -53,8 +53,11 @@ Route::get('/home_customer', [HomeController::class, 'HomeCustomer']);
    Route::post('/customer/complaints',[ComplaintController::class, 'storeComplaint'] );
 
 
-      Route::post('/customer/fcm-token',[FcmTokenController::class, 'saveToken']);
+      
+   
+   Route::post('/customer/fcm-token',[FcmTokenController::class, 'saveToken']);
 
+ Route::post('/store_fcm_token',[CustomerFcmTokenController::class, 'store']);
 
 
 
