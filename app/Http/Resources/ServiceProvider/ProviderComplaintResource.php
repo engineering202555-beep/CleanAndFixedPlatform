@@ -27,7 +27,7 @@ class ProviderComplaintResource extends JsonResource
 
              'against_user' => $this->againstUser
                 ? [
-                    'id' => $this->againstUser->id,
+                   
                     'first_name' =>
                         $this->againstUser->first_name,
                     'last_name' =>
