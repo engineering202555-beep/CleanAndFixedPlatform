@@ -39,6 +39,9 @@ Route::middleware(['auth:sanctum', 'role:provider','provider.active'])->group(fu
     Route::post('/fcm-token', [FcmTokenController::class, 'store']);
     Route::patch('/preferences/do-not-disturb', [ProviderPreferencesController::class, 'updateDoNotDisturb']);
     Route::get('/requests-archive', ProviderArchiveController::class);
+
+    Route::get('/my-requests', [ServiceRequestController::class, 'myRequests']);
+
 //  Route::get('/offers', [OfferController::class, 'index']);
 
        Route::post('/storeProviderComplaint',[ProviderComplaintController::class, 'storeProviderComplaint']);

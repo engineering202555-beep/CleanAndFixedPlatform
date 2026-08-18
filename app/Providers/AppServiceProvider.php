@@ -2,6 +2,12 @@
 
 namespace App\Providers;
 
+use App\Events\NewServiceRequestEligible;
+use App\Events\OfferAccepted;
+use App\Events\OfferSuperseded;
+use App\Events\ProviderUpdatedRequestStatus;
+use App\Listeners\HandleOfferAccepted;
+use App\Listeners\SendNewServiceRequestFcm;
 use App\Models\Offer;
 use App\Observers\OfferObserver;
 use App\Observers\ServiceRequestObserver;

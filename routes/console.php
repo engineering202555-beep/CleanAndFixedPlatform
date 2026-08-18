@@ -1,5 +1,6 @@
 <?php
 
+use App\Console\Commands\SyncProviderAvailabilityWithWorkingHours;
 use App\Console\Commands\UnblockExpiredCustomers;
 use App\Console\Commands\UnblockExpiredProviders;
 use Illuminate\Foundation\Inspiring;
@@ -17,4 +18,5 @@ Schedule::command('requests:cancel-expired-service-requests')
 //Admin Section:
 Schedule::command(UnblockExpiredProviders::class)->hourly();
 Schedule::command(UnblockExpiredCustomers::class)->hourly();
+Schedule::command(SyncProviderAvailabilityWithWorkingHours::class)->everyFiveMinutes();
 

@@ -11,16 +11,17 @@ class ProviderEligibilityService
 {
     use ChecksProviderAvailability;
 
-    private const LOCAL_SEARCH_STATUSES = ['pending_local'];
     private const GLOBAL_SEARCH_STATUSES = ['pending_global'];
 
+    /**
+     * ⚠️ لاحظي: availability_status (busy/available/offline) ما
+     * عاد يُفحص هون إطلاقاً — أصبح حقل معلوماتي بس (لعرضه بلوحة
+     * الأدمن)، مش بوابة أهلية فعلية. القرار الوحيد بمنطقة "الوقت"
+     * هو do_not_disturb + الدوام، بغض النظر عن قيمة availability_status.
+     */
     public function isEligible(ServiceProvider $provider, ServiceRequest $request): bool
     {
         if ($provider->account_status !== 'active') {
-            return false;
-        }
-
-        if ($provider->availability_status === 'offline') {
             return false;
         }
 
@@ -32,13 +33,14 @@ class ProviderEligibilityService
             return false;
         }
 
-        // العاجل بيتجاوز كل شي (الدوام وDND معاً) — بغض النظر عن أي إعداد.
+        // العاجل بيتجاوز كل شي دايماً — داخل الدوام أو برّاه، DND
+        // مفعّل أو لأ.
         if ($request->is_urgent) {
             return true;
         }
 
-        // العادي: الوقت بس بيأثر لو DND مفعّل فعلياً. DND=false يعني
-        // الوقت مالوش أي تأثير إطلاقاً على الطلبات العادية.
+        // عادي: يُمنع فقط بحالة واحدة — DND مفعّل وبرّا الدوام سوا.
+        // DND مطفي = الوقت مالوش أي تأثير إطلاقاً (حتى لو برّا الدوام).
         if ($provider->do_not_disturb && ! $this->isWithinWorkingHours($provider)) {
             return false;
         }
@@ -46,13 +48,6 @@ class ProviderEligibilityService
         return true;
     }
 
-    /**
-     * pending_local: نفس service_area_id بالضبط (بحث ضيّق).
-     * pending_global: نفس المدينة (city) بس، نطاق أوسع بيتحمّل
-     * تكاليف إضافية (نقل أبعد) — مش نفس المنطقة بالضبط.
-     * أي حالة تانية (processing، الخ): تطابق مباشر افتراضي (نادراً
-     * ما توصل هون أصلاً لأنه الأهلية بتُفحص بس بمرحلة البحث).
-     */
     private function matchesArea(ServiceProvider $provider, ServiceRequest $request): bool
     {
         if (in_array($request->status, self::GLOBAL_SEARCH_STATUSES, true)) {
@@ -67,7 +62,6 @@ class ProviderEligibilityService
         $query = ServiceProvider::query()
             ->with('serviceArea:id,city')
             ->where('account_status', 'active')
-            ->where('availability_status', '!=', 'offline')
             ->where('service_category_id', $request->service_category_id);
 
         if (in_array($request->status, self::GLOBAL_SEARCH_STATUSES, true)) {
@@ -86,4 +80,3 @@ class ProviderEligibilityService
             ->values();
     }
 }
-

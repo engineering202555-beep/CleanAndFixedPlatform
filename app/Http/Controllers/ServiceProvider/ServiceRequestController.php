@@ -6,6 +6,7 @@ use App\Events\ProviderUpdatedRequestStatus;
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ServiceProvider\ServiceRequest\ListEligibleRequestsRequest;
+use App\Http\Requests\ServiceProvider\ServiceRequest\ProviderMyRequestsIndexRequest;
 use App\Http\Resources\ServiceProvider\ServiceRequestResource;
 use App\Models\ServiceRequest;
 use App\Services\ServiceRequest\ProviderRequestActionService;
@@ -80,6 +81,17 @@ class ServiceRequestController extends Controller
         $updated = $this->actionService->cancel($provider, $serviceRequest);
 
         return ApiResponse::success(ServiceRequestResource::make($updated), 'تم إلغاء الطلب بنجاح');
+    }
+
+    public function myRequests(ProviderMyRequestsIndexRequest $request)
+    {
+        $provider = $request->user()->serviceProvider;
+
+        $requests = $this->queryService->getMyRequests($provider, $request->validated());
+
+        $paginated = ServiceRequestResource::collection($requests)->response()->getData(true);
+
+        return ApiResponse::success($paginated, 'تم جلب طلباتك بنجاح');
     }
 }
 

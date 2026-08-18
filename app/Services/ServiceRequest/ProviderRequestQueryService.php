@@ -4,7 +4,6 @@ namespace App\Services\ServiceRequest;
 
 use App\Models\ServiceProvider;
 use App\Models\ServiceRequest;
-use App\Traits\ChecksProviderAvailability;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
@@ -17,17 +16,9 @@ class ProviderRequestQueryService
     ) {
     }
 
-    /**
-     * صفر تكرار لمنطق الأهلية هون — الفلترة الوحيدة بمستوى SQL هي
-     * "نفس التصنيف + بمرحلة بحث فعلاً" (لتقليل حجم البيانات المجلوبة
-     * فقط، أداء بحت). التحقق الدقيق (محلي/عالمي، دوام، DND، استعجال)
-     * **كله** عبر ProviderEligibilityService::isEligible() — نفس
-     * بالضبط الدالة المستخدمة بـ getRequestDetails() وبـ Job
-     * الإشعارات، بدون أي نسخة موازية ممكن تنحرف عنها مستقبلاً.
-     */
     public function getEligibleRequests(ServiceProvider $provider, array $filters = []): LengthAwarePaginator
     {
-        if ($provider->account_status !== 'active' || $provider->availability_status === 'offline') {
+        if ($provider->account_status !== 'active') {
             return ServiceRequest::query()->whereRaw('1 = 0')->paginate($filters['per_page'] ?? 15);
         }
 
@@ -51,6 +42,44 @@ class ProviderRequestQueryService
                     $q->where('service_provider_id', $provider->id);
                 },
             ])
+            ->orderByDesc('is_urgent')
+            ->latest()
+            ->paginate($filters['per_page'] ?? 15);
+    }
+
+    /**
+     * كل الطلبات يلي مقدم الخدمة قدّم عرض عليها ولو مرة، بغض النظر
+     * عن حالتها الحالية — بعكس getEligibleRequests() المقصورة على
+     * pending_* بس. whereHas('offers') هي شرط الملكية/العلاقة
+     * الوحيد، والفلاتر التلاتة (status/request_type/is_urgent)
+     * تضييق إضافي فوقها، مش بديل عنها.
+     */
+    public function getMyRequests(ServiceProvider $provider, array $filters = []): LengthAwarePaginator
+    {
+        return ServiceRequest::query()
+            ->whereHas('offers', function ($query) use ($provider) {
+                $query->where('service_provider_id', $provider->id);
+            })
+            ->when($filters['status'] ?? null, function ($query, $status) {
+                $query->where('status', $status);
+            })
+            ->when($filters['request_type'] ?? null, function ($query, $type) {
+                $query->where('request_type', $type);
+            })
+            ->when(array_key_exists('is_urgent', $filters) && $filters['is_urgent'] !== null, function ($query) use ($filters) {
+                $query->where('is_urgent', (bool) $filters['is_urgent']);
+            })
+            ->with([
+                'serviceCategory:id,name',
+                'serviceArea:id,area_name,city',
+                'customer.user:id,first_name,last_name',
+            ])
+            ->withExists([
+                'offers as has_my_offer' => function ($q) use ($provider) {
+                    $q->where('service_provider_id', $provider->id);
+                },
+            ])
+            ->orderByDesc('is_urgent')
             ->latest()
             ->paginate($filters['per_page'] ?? 15);
     }
@@ -71,4 +100,3 @@ class ProviderRequestQueryService
         ]);
     }
 }
-
