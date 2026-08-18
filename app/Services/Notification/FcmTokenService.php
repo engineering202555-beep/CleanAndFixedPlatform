@@ -12,7 +12,7 @@ class FcmTokenService
         return FcmToken::updateOrCreate(
             [
                 'user_id' => $user->id,
-               
+                'fcm_token' => $token,
             ],
             [
                 'fcm_token' => $token,

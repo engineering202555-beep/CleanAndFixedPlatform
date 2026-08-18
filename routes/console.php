@@ -12,7 +12,9 @@ Artisan::command('inspire', function () {
 
 Schedule::command('app:reset-urgent-requests-counter')
     ->dailyAt('00:00');
-
+Schedule::command('requests:cancel-expired-service-requests')
+    ->everyFiveMinutes();
 //Admin Section:
 Schedule::command(UnblockExpiredProviders::class)->hourly();
 Schedule::command(UnblockExpiredCustomers::class)->hourly();
+

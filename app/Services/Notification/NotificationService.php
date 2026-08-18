@@ -8,8 +8,9 @@ use App\Models\User;
 class NotificationService
 {
     public function __construct(
-        private FirebaseNotificationService $firebase
-    ) {}
+        private readonly FcmNotificationService $fcm
+    ) {
+    }
 
     public function notify(
         User $user,
@@ -21,48 +22,76 @@ class NotificationService
     ): Notification {
 
         /*
-        ==========================================
-        1. حفظ الإشعار في Database
-        ==========================================
+        ============================================
+        1. حفظ الإشعار في قاعدة البيانات
+        ============================================
         */
 
         $notification = Notification::create([
             'user_id' => $user->id,
+
             'reference_id' => $referenceId,
+
             'reference_type' => $referenceType,
+
             'type' => $type,
+
             'title' => $title,
+
             'body' => $body,
+
             'is_read' => false,
         ]);
 
+
         /*
-        ==========================================
+        ============================================
         2. تجهيز Data للـ Flutter
-        ==========================================
+        ============================================
         */
 
-        $data = [
-            'notification_id' => (string) $notification->id,
-            'type' => $type,
-            'reference_id' => $referenceId
-                ? (string) $referenceId
-                : '',
-            'reference_type' => $referenceType ?? '',
+        $payload = [
+
+            'notification_id' =>
+                (string) $notification->id,
+
+            'type' =>
+                $type,
+
+            'reference_id' =>
+                $referenceId !== null
+                    ? (string) $referenceId
+                    : '',
+
+            'reference_type' =>
+                $referenceType ?? '',
         ];
 
+
         /*
-        ==========================================
-        3. إرسال Push عبر Firebase
-        ==========================================
+        ============================================
+        3. إرسال Push Notification
+        ============================================
         */
 
-        $this->firebase->sendToUser(
-            $user,
-            $title,
-            $body,
-            $data
+        $this->fcm->sendToUser(
+            $user->id,
+            $type,
+            array_merge(
+                $payload,
+                [
+                    'title' => $title,
+                    'body' => $body,
+                ]
+            )
         );
+
+
+        /*
+        ============================================
+        4. إرجاع Notification
+        ============================================
+        */
 
         return $notification;
     }

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Services\Auth;
-
+use Illuminate\Support\Facades\Log;
 use App\Models\PhoneOtp;
 use App\Models\User;
 use App\Support\Otp\OtpGatewayInterface;
@@ -80,6 +80,35 @@ class OtpService
                 'تعذّر إرسال رمز التحقق حالياً، حاول مرة أخرى بعد قليل.'
             );
         }
+
+  // مؤقتًا للاختبار المحلي
+    Log::info('Provider OTP generated', [
+        'user_id' => $user->id,
+        'phone' => $user->phone_number,
+        'otp' => $plainCode,
+    ]);
+
+    $sent = $this->gateway->send(
+        $user->phone_number,
+        $plainCode
+    );
+
+    if (! $sent) {
+        throw new UnprocessableEntityHttpException(
+            'تعذّر إرسال رمز التحقق حالياً، حاول مرة أخرى بعد قليل.'
+        );
+    }
+
+
+
+
+
+
+
+
+
+
+
     }
 
     public function verify(User $user, string $code): void

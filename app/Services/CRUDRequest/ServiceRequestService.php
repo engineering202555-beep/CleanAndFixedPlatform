@@ -12,230 +12,295 @@ use Illuminate\Validation\ValidationException;
 
 class ServiceRequestService
 {
-    public function store(User $user, array $data): ServiceRequest
-    {
-        return DB::transaction(function () use ($user, $data) {
+   
 
-            /*
-            ============================================
-            1- جلب بيانات الزبون
-            ============================================
-            */
+public function store(User $user, array $data): ServiceRequest
+{
+    return DB::transaction(function () use ($user, $data) {
 
-          $customer = Customer::where('user_id', $user->id)->firstOrFail();
+        /*
+        ============================================
+        1. جلب بيانات الزبون
+        ============================================
+        */
 
-            /*
-            ============================================
-            2- التحقق من الحظر  تم
-            ============================================
-            */
-
-            if (
-                $customer->status === 'blocked' &&
-                $customer->blocked_until &&
-                now()->lt($customer->blocked_until)
-            ) {
-
-                throw ValidationException::withMessages([
-                    'customer' => [
-                        'Your account is blocked.'
-                    ]
-                ]);
-            }
-
-            /*
-            ============================================
-            3- معالجة الطلب المستعجل    تم
-            ============================================
-            */
-
-            if ($data['is_urgent']) {
-
-               
-                
-
-                if ($customer->counter_urgent_requests_during_day >= 2) {
-
-                    throw ValidationException::withMessages([
-                        'urgent_request' => [
-                            'You reached todays urgent request limit.'
-                        ]
-                    ]);
-                }
-
-                $customer->increment('counter_urgent_requests_during_day');
-            }
-
-            /*
-            ============================================
-            4- التأكد من عدم وجود طلب نشط
-            لنفس الخدمة   تم
-            ============================================
-            */
-
-            $exists = ServiceRequest::where('customer_id', $customer->id)
-                ->where('service_category_id', $data['service_category_id'])
-                ->whereIn('status', [
-
-                    'pending_local',
-
-                    'pending_global',
-
-                    'processing',
-
-                    'accepted',
-
-                    'inspection_accepted',
-
-                    'inspection_in_progress',
-
-                    'fault_detected',
-
-                    'scheduled',
-
-                    'in_progress'
-
-                ])
-
-                ->exists();
-
-            if ($exists) {
-
-                throw ValidationException::withMessages([
-                    'request' => [
-                        'You already have an active request for this service.'
-                    ]
-                ]);
-            }
-
-            /*
-            ============================================
-            5- تحديد موعد البداية   تم
-            ============================================
-            */
-
-            $startsAt = $data['is_urgent']
-                ? now()
-                : $data['starts_at'];
-/*
-============================================
-6- تحديد حالة الطلب   تم
-============================================
-*/
-
-$status = 'pending_local';
-
-$hasLocalProvider = ServiceProvider::where(
-        'service_area_id',
-      $data['service_area_id']
-    )
-    ->where('availability_status', 'available')
-    ->exists();
-
-if (!$hasLocalProvider) {
-
-    $status = 'pending_global';
-}  
-
-  /*
-
-        $status = $hasLocalProvider
-            ? 'pending_local'
-            : 'pending_global';
+        $customer = Customer::where('user_id', $user->id)
+            ->firstOrFail();
 
 
         /*
+        ============================================
+        2. التحقق من حظر الزبون
+        ============================================
+        */
+
+        if (
+            $customer->status === 'blocked' &&
+            $customer->blocked_until &&
+            now()->lt($customer->blocked_until)
+        ) {
+            throw ValidationException::withMessages([
+                'customer' => [
+                    'Your account is blocked.'
+                ]
+            ]);
+        }
 
 
+        /*
+        ============================================
+        3. الطلب المستعجل
+        ============================================
+        */
+
+        if ($data['is_urgent']) {
+
+            if ($customer->counter_urgent_requests_during_day >= 2) {
+                throw ValidationException::withMessages([
+                    'urgent_request' => [
+                        'You reached todays urgent request limit.'
+                    ]
+                ]);
+            }
+
+            $customer->increment(
+                'counter_urgent_requests_during_day'
+            );
+        }
 
 
+        /*
+        ============================================
+        4. منع وجود طلب نشط لنفس الخدمة
+        ============================================
+        */
+
+        $exists = ServiceRequest::where(
+                'customer_id',
+                $customer->id
+            )
+            ->where(
+                'service_category_id',
+                $data['service_category_id']
+            )
+            ->whereIn('status', [
+                'pending_local',
+                'pending_global',
+                'processing',
+                'accepted',
+                'inspection_accepted',
+                'inspection_in_progress',
+                'fault_detected',
+                'scheduled',
+                'in_progress',
+            ])
+            ->exists();
+
+        if ($exists) {
+            throw ValidationException::withMessages([
+                'request' => [
+                    'You already have an active request for this service.'
+                ]
+            ]);
+        }
 
 
+        /*
+        ============================================
+        5. تحديد موعد البداية
+        ============================================
+        */
+
+        $startsAt = $data['is_urgent']
+            ? now()
+            : $data['starts_at'];
 
 
+        /*
+        ============================================
+        6. جلب منطقة الطلب
+        ============================================
+        */
+
+        $serviceArea = ServiceArea::findOrFail(
+            $data['service_area_id']
+        );
 
 
+        /*
+        ============================================
+        7. البحث المحلي
+           
+           نفس:
+           - المنطقة
+           - التصنيف
+           - مقدم الخدمة Active
+           - Available
+        ============================================
+        */
+
+        $hasLocalProvider = ServiceProvider::query()
+            ->where('service_area_id', $serviceArea->id)
+            ->where(
+                'service_category_id',
+                $data['service_category_id']
+            )
+            ->where('account_status', 'active')
+            ->where('availability_status', 'available')
+            ->exists();
 
 
+        /*
+        ============================================
+        8. تحديد Local / Global
+        ============================================
+        */
 
+        if ($hasLocalProvider) {
 
+            $status = 'pending_local';
+
+        } else {
 
             /*
-
-
-
-            ============================================
-            6- إنشاء الطلب
-            ============================================
+            ========================================
+            لا يوجد Provider في نفس المنطقة
+نبحث في نفس المدينة
+            لكن في مناطق أخرى
+            ========================================
             */
 
-            $request = ServiceRequest::create([
+            $hasGlobalProvider = ServiceProvider::query()
+                ->where(
+                    'service_category_id',
+                    $data['service_category_id']
+                )
+                ->where('account_status', 'active')
+                ->where('availability_status', 'available')
+                ->whereHas('serviceArea', function ($query) use ($serviceArea) {
 
-                'customer_id' => $customer->id,
+                    $query->where(
+                        'city',
+                        $serviceArea->city
+                    );
 
-                'service_category_id' => $data['service_category_id'],
+                })
+                ->exists();
 
-                'service_area_id' =>$data['service_area_id'],
+            /*
+            سواء وجد Provider Global أم لا،
+            حالة الطلب تصبح pending_global.
 
-                'request_type' => $data['request_type'],
+            الفرق أن النظام لاحقاً سيبحث عن
+            Providers في نفس المدينة.
+            */
 
-                'status' => $status,
-                'description' => $data['description'] ?? null,
+            $status = 'pending_global';
+        }
 
-                'starts_at' => $startsAt,
 
-                'latitude_x' => $data['latitude_x'],
+        /*
+        ============================================
+        9. إنشاء الطلب
+        ============================================
+        */
 
-                'longitude_y' => $data['longitude_y'],
+        $serviceRequest = ServiceRequest::create([
 
-                'is_urgent' => $data['is_urgent'],
+            'customer_id' =>
+                $customer->id,
 
-                'duration_in_minutes' => $data['duration_in_minutes'] ?? 60,
+            'service_category_id' =>
+                $data['service_category_id'],
 
-                'expires_at' => now()->addHour(),
+            'service_area_id' =>
+                $serviceArea->id,
 
-            ]);
+            'request_type' =>
+                $data['request_type'],
 
-          if (!empty($data['images'])) {
+            'status' =>
+                $status,
 
-    foreach ($data['images'] as $image) {
+            'description' =>
+                $data['description'] ?? null,
 
-        $path = $image->store('service_requests', 'public');
+            'starts_at' =>
+                $startsAt,
 
-        $request->images()->create([
+            'latitude_x' =>
+                $data['latitude_x'],
 
-            'path' => $path,
+            'longitude_y' =>
+                $data['longitude_y'],
 
-            'type' => 'request_damage',
+            'is_urgent' =>
+                $data['is_urgent'],
 
+            'duration_in_minutes' =>
+                $data['duration_in_minutes'] ?? 60,
+
+            'expires_at' =>
+                now()->addHour(),
         ]);
-    }
+
+
+        /*
+        ============================================
+        10. صور الطلب
+        ============================================
+        */
+
+        if (!empty($data['images'])) {
+
+            foreach ($data['images'] as $image) {
+
+                $path = $image->store(
+                    'service_requests',
+                    'public'
+                );
+
+                $serviceRequest->images()->create([
+                    'path' => $path,
+                    'type' => 'request_damage',
+                ]);
+            }
+        }
+
+
+        /*
+        ============================================
+        11. الإرجاع
+        ============================================
+        */
+
+        return $serviceRequest->load([
+            'customer.user',
+            'serviceCategory',
+            'serviceArea',
+            'images',
+        ]);
+    });
 }
 
 
 
 
-/*
-============================================
-7- إرسال الطلب لمقدمي الخدمة
-============================================
 
-إذا كانت الحالة pending_local
-→ يرسل الطلب لمقدمي الخدمة بنفس المنطقة.
 
-إذا كانت الحالة pending_global
-→ يرسل الطلب لجميع مقدمي الخدمة في نفس المدينة.
 
-(سننفذها لاحقًا عند بناء نظام العروض والإشعارات)
-*/
-          
 
-            return  $request;
-  
-    
 
-        });
-    }
+
+
+
+
+
+
+
+
+
+
 
 
 public function allRequest(User $user)

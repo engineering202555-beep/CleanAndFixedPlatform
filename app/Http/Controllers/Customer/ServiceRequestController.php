@@ -8,7 +8,7 @@ use App\Http\Resources\Customer\ServiceRequestDetailsResource;
 use App\Http\Requests\Customer\StoreServiceRequestRequest;
 use App\Http\Requests\Customer\UpdateServiceRequestRequest;
 use App\Services\CRUDRequest\ServiceRequestService;
-
+use App\Helpers\ApiResponse;
 use App\Services\CRUDRequest\ConfirmationService;
 class ServiceRequestController extends Controller
 {
@@ -27,10 +27,30 @@ class ServiceRequestController extends Controller
         $request->validated()
     );
 
-    return response()->json([
+   /* return response()->json([
         'message' => 'Request created successfully',
         'data' => new ServiceRequestResource($serviceRequest),
-    ], 201);
+    ], 201);*/
+
+$message = match ($serviceRequest->status) {
+    'pending_local' =>
+        'Your request is being searched for locally in your area.',
+
+    'pending_global' =>
+        'No available provider was found in your area. '
+        . 'Your request is being searched for across your city.',
+
+    default =>
+        'Service request created successfully.'
+};
+
+return ApiResponse::success(
+    ServiceRequestResource::make($serviceRequest),
+    $message,
+    201
+);
+
+
 }
 
 public function allRequest()
@@ -95,7 +115,7 @@ public function confirmService(ServiceRequest $serviceRequest)
     );
 
     return response()->json([
-        'message' => 'Service completed successfully.',
+        'message' => 'Service confirm successfully.',
         'data' => new ServiceRequestResource($serviceRequest),
     ]);
 }

@@ -18,6 +18,7 @@ class FcmTokenController extends Controller
      */
     public function store(StoreFcmTokenRequest $request)
     {
+        
         FcmToken::updateOrCreate(
             ['fcm_token' => $request->validated('fcm_token')],
             ['user_id' => $request->user()->id]

@@ -54,7 +54,7 @@ class ConfirmationService
             ============================================
             */
 
-            if ($serviceRequest->status !== 'awaiting_confirmation') {
+            if ($serviceRequest->status !== 'in_progress') {
 
                 throw ValidationException::withMessages([
                     'request' => [
@@ -71,7 +71,7 @@ class ConfirmationService
             */
 
             $serviceRequest->update([
-                'status' => 'completed',
+                'status' => 'awaiting_confirmation',
             ]);
 
 
